@@ -164,6 +164,18 @@ def test_project_add(project_keys):
   assert r == 204, "Successfull deletion must return status code 204"
 
 
+def test_project_invalid_id():
+  """
+  Get an invalid project
+  """
+  
+  r = Project.get(1)
+
+  assert isinstance(r, dict)
+  
+  assert r['status'] == 404, "Invalid project ID should not be found"
+
+
 def test_people_get_all(people_keys):
   """
   Get all people
