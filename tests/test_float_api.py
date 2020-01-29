@@ -185,6 +185,7 @@ def test_project_get_all(project_keys):
   for p in r:
     assert isinstance(p, dict), "Project list entries must be dicts"
     assert set(project_keys).issubset(p.keys()), "All project keys must be in projects"
+    assert isinstance(p['tags'], list), "Project tags must be a list"
 
 
 def test_project_add(project_keys):
@@ -278,6 +279,7 @@ def test_people_get_all(people_keys):
   for p in r:
     assert isinstance(p, dict), "Person list entries must be dicts"
     assert set(people_keys).issubset(p.keys()), "All people keys must be in people"
+    assert isinstance(p['tags'], list), "People tags must be a list"
 
 
 def test_people_invalid_id():
