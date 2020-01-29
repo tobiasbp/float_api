@@ -13,6 +13,7 @@ base_url = 'https://api.float.com/v3/{}'
 class APITokenMissingError(Exception):
   pass
 
+# Raise an error if we do not have an access token
 if FLOAT_ACCESS_TOKEN == None:
   raise APIKeyMissingError(
     "No API key in FLOAT_ACCESS_TOKEN"
@@ -23,14 +24,11 @@ if FLOAT_ACCESS_TOKEN == None:
 session = requests.Session()
 headers = {"Authorization": "Bearer " + FLOAT_ACCESS_TOKEN}
 
-# Append access token to each request
-#session.params = {
-#  'api_key': FLOAT_ACCESS_TOKEN
-#  }
 
 # Import here, since Project needs the session
-from .float_api import Project
+from .float_api import Clients
 from .float_api import People
+from .float_api import Project
 
 
 

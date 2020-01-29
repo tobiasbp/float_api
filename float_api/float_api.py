@@ -3,6 +3,82 @@ from . import session
 from . import headers
 from . import base_url
 
+class Clients():
+  """
+  Clients in Float. The have unique names.
+  """
+
+  @staticmethod
+  def get(client_id = None):
+    """
+    Get a single Client entry if client_id is supplied,
+    get all Clients otherwise.
+    """
+
+    if client_id:
+      url = base_url.format('clients/' + str(client_id))
+    else:
+      url = base_url.format('clients')
+
+    r = session.get(url, headers=headers)
+
+    return r.json()
+
+
+  @staticmethod
+  def add(name):
+    """
+    Add a client. Only has field name
+    """
+
+    # A dictionary to post
+    data = {'name': name}
+    
+    # Build the URL
+    url = base_url.format('clients')
+
+    # Post the data
+    r = session.post(url, data=data, headers=headers)
+
+    # Return the result 
+    return r.json()
+
+
+  @staticmethod
+  def delete(client_id):
+    """
+    Delete a client by id
+    """
+
+    url = base_url.format('clients/' + str(client_id))
+
+    r = session.delete(url, headers=headers)
+
+    return r.status_code
+
+
+  @staticmethod
+  def update(data):
+    """
+    Update project. Data must include project_id
+    """
+
+    # make sure we have a dict
+    assert isinstance(data, dict)
+
+    # project_id must be a key in data
+    assert 'client_id' in set(data.keys())
+
+    # Build the URL
+    url = base_url.format('clients/' + str(data['client_id']))
+
+    # Post the data
+    r = session.patch(url, data=data, headers=headers)
+
+    # Return the result 
+    return r.json()
+
+
 class Project():
   """
   Projects in Float

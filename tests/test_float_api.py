@@ -1,8 +1,9 @@
 
 from pytest import fixture
 
-from float_api import Project
+from float_api import Clients
 from float_api import People
+from float_api import Project
 
 @fixture
 def project_keys():
@@ -55,6 +56,95 @@ def people_keys():
     'modified'
     ]
 
+@fixture
+def client_keys():
+  return [
+    'name',
+    'client_id'
+    ]
+
+def test_client_add(client_keys):
+  """
+  Add a new client
+  Get the new client
+  Update the new client
+  Delete the new client
+  """
+  
+  # The name for the new client (Only has name)
+  client_name = "FooBar Inc. 30018"
+  
+  # Add a new client
+  r = Clients.add(client_name)
+
+  # Make sure we got a dict
+  assert isinstance(r, dict), "Add client must return a  dict"
+
+  # Make sure the new client dict has all the client keys
+  assert set(client_keys).issubset(r.keys()), "Client keys must be in new client"
+
+  # Name of new client must match in response
+  assert r['name'] == client_name, "New client name must be what we ordered" 
+
+
+  # FIXME: Return an empty dict instead of this mess?
+  # Add a new client with existing name
+  r2 = Clients.add(client_name)
+
+  # Make sure we got a list (With a dict)
+  assert isinstance(r2, list), "Add client must return a  dict"
+
+  # Make sure invalid creation returns description
+  assert set(['field', 'message']).issubset(r2[0].keys()), "Response must decribe problem in field"
+
+  # Error is in field name
+  assert r2[0]['field'] == 'name', "Non unique client name is a problem in field name" 
+
+
+
+  # Get the newly created project
+  r = Clients.get(r['client_id'])
+
+  # Make sure we got a dict
+  assert isinstance(r, dict), "Get client must return a  dict"
+
+  # Make sure we have all the client keys
+  assert set(client_keys).issubset(r.keys()), "Client keys must be in client"
+
+  # Name of new client must match
+  assert r['name'] == client_name, "New client must have the name we ordered" 
+
+
+  # New name for client
+  new_client_name = "NewFancyName Inc. 4"
+  
+  # Update dictionary
+  r['name'] = new_client_name
+  
+  # Update the project with new name
+  r = Clients.update(r)
+
+  # Make sure we got a dict
+  assert isinstance(r, dict), "Updated client must return a  dict"
+
+  # Make sure we have all the client keys
+  assert set(client_keys).issubset(r.keys()), "Client keys must be in updated client"
+
+  # Notes of update project must match
+  assert r['name'] == new_client_name, "Updated client must have new name" 
+
+  
+  # Delete the client we just created
+  r = Clients.delete(r['client_id'])
+  
+  # Makes sure we have a status code
+  assert isinstance(r, int), "Deletion must return a status code integer"
+
+  # Response must be a 204 on successfull deletion
+  assert r == 204, "Successfull deletion must return status code 204"
+
+
+'''
 def test_project_get(project_keys):
   """
   Get a single project
@@ -77,6 +167,7 @@ def test_project_get(project_keys):
 
   # Make sure we got the project_id
   assert r['project_id'] == project_id, "project_id must be in response"
+'''
 
 
 def test_project_get_all(project_keys):
