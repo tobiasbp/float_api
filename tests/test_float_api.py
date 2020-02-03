@@ -1,9 +1,32 @@
 
 from pytest import fixture
 
-from float_api import Clients
-from float_api import People
-from float_api import Project
+import os
+import sys
+
+#from float_api import Clients
+#from float_api import People
+#from float_api import Project
+from float_api import FloatAPI
+
+# Get access token from environment variable
+FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
+
+@fixture
+def account_keys():
+  return [
+    'account_id',
+    'name',
+    'email',
+    'account_type',
+    'department_filter_id',
+    'view_rights',
+    'edit_rights',
+    'active',
+    'created',
+    'modified'
+    ]
+
 
 @fixture
 def project_keys():
@@ -63,301 +86,89 @@ def client_keys():
     'client_id'
     ]
 
-def test_client_add(client_keys):
-  """
-  Add a new client
-  Get the new client
-  Update the new client
-  Delete the new client
-  """
+
+#@fixture
+def task_keys():
+  return [
+    'task_id',
+    'project_id',
+    'start_date',
+    'end_date',
+    'start_time',
+    'hours',
+    'people_id',
+    'status',
+    'priority',
+    'name',
+    'notes',
+    'repeat_state',
+    'repeat_end_date',
+    'created_by',
+    'created',
+    'modified_by',
+    'modified'
+    ]
+
+
+
+
+api = FloatAPI(FLOAT_ACCESS_TOKEN)
+
+def test_get_all():
+
+  functions = [
+    (api.get_all_accounts, account_keys()),
+    (api.get_all_clients, client_keys()),
+    (api.get_all_people, people_keys()),
+    (api.get_all_projects, project_keys()),
+    (api.get_all_tasks, task_keys())
+    ]
   
-  # The name for the new client (Only has name)
-  client_name = "FooBar Inc. 30018"
+  for func, keys in functions:
+    r = func()
+    assert isinstance(keys, list), "Keys is a list"
+    assert isinstance(r, list), "get all is a list"
+
+    for c in r:
+      assert isinstance(c, dict), "Get all list item is a dict"
+      assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
+
+
+def test_create_get_delete():
+
+  functions = [
+    (api.create_client, api.delete_client, api.get_client, client_keys(), 'client_id'),
+    (api.create_person, api.delete_person, api.get_person, people_keys(), 'people_id'),
+    (api.create_project, api.delete_project, api.get_project, project_keys(), 'project_id'),
+    ]
   
-  # Add a new client
-  r = Clients.add(client_name)
+  for f_create, f_delete, f_get, keys, o_id in functions:
+    
+    # Create object
+    r = f_create(name='TestDataFromAPI 1')
+    
+    assert isinstance(keys, list), "Keys is a list"
+    assert isinstance(r, dict), "New object is a list is a list"
+    assert set(keys).issubset(r.keys()), "Dict has all keys" + str(f_create)
+
+    # Get object
+    created_object = r
+    
+    # Get the object we just created
+    r = f_get(created_object[o_id])
+    
+    # New object must have all keys
+    assert set(keys).issubset(r.keys()), "New objects has all keys" + str(f_get)
+
+    
+    # Person: People_type_id is updated after posting, so this fails
+    #assert created_object == r, "Get newly created object: {}".format(f_get) 
+    
+    # FIXME: Update
+
+    # Delete object
+    r = f_delete(r[o_id])
+    
+    assert r == True, "New object deleted" + str(f_delete)
 
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Add client must return a  dict"
-
-  # Make sure the new client dict has all the client keys
-  assert set(client_keys).issubset(r.keys()), "Client keys must be in new client"
-
-  # Name of new client must match in response
-  assert r['name'] == client_name, "New client name must be what we ordered" 
-
-
-  # FIXME: Return an empty dict instead of this mess?
-  # Add a new client with existing name
-  r2 = Clients.add(client_name)
-
-  # Make sure we got a list (With a dict)
-  assert isinstance(r2, list), "Add client must return a  dict"
-
-  # Make sure invalid creation returns description
-  assert set(['field', 'message']).issubset(r2[0].keys()), "Response must decribe problem in field"
-
-  # Error is in field name
-  assert r2[0]['field'] == 'name', "Non unique client name is a problem in field name" 
-
-
-
-  # Get the newly created project
-  r = Clients.get(r['client_id'])
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Get client must return a  dict"
-
-  # Make sure we have all the client keys
-  assert set(client_keys).issubset(r.keys()), "Client keys must be in client"
-
-  # Name of new client must match
-  assert r['name'] == client_name, "New client must have the name we ordered" 
-
-
-  # New name for client
-  new_client_name = "NewFancyName Inc. 4"
-  
-  # Update dictionary
-  r['name'] = new_client_name
-  
-  # Update the project with new name
-  r = Clients.update(r)
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Updated client must return a  dict"
-
-  # Make sure we have all the client keys
-  assert set(client_keys).issubset(r.keys()), "Client keys must be in updated client"
-
-  # Notes of update project must match
-  assert r['name'] == new_client_name, "Updated client must have new name" 
-
-  
-  # Delete the client we just created
-  r = Clients.delete(r['client_id'])
-  
-  # Makes sure we have a status code
-  assert isinstance(r, int), "Deletion must return a status code integer"
-
-  # Response must be a 204 on successfull deletion
-  assert r == 204, "Successfull deletion must return status code 204"
-
-
-'''
-def test_project_get(project_keys):
-  """
-  Get a single project
-  """
-  
-  # The project ID to test
-  project_id = 2502659
-
-  # Get a project by ID
-  #project = Project(p_id)
-
-  # Get the project info
-  r = Project.get(project_id)
-
-  # Make sure we have a dict
-  assert isinstance(r, dict)
-
-  # Make sure we have all project keys
-  assert set(project_keys).issubset(r.keys()), "All keys must be in response"
-
-  # Make sure we got the project_id
-  assert r['project_id'] == project_id, "project_id must be in response"
-'''
-
-
-def test_project_get_all(project_keys):
-  """
-  Get a list of projects
-  """
-
-  # Get a list of all projects
-  r = Project.get()
-  
-  # Make sure we have a list in the result
-  assert isinstance(r, list), "Project list must be a list"
-  
-  # Make sure all projects have all project keys
-  for p in r:
-    assert isinstance(p, dict), "Project list entries must be dicts"
-    assert set(project_keys).issubset(p.keys()), "All project keys must be in projects"
-    assert isinstance(p['tags'], list), "Project tags must be a list"
-
-
-def test_project_add(project_keys):
-  """
-  Add a new project
-  Get the new person
-  Update the new person
-  Delete the new person
-  """
-  
-  # The data for the new person
-  data = {
-    "name": "Demo project",
-    "notes": "Created by API for testing"
-    }
-
-  # Add a new person
-  r = Project.add(data)
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Add project must return a  dict"
-
-  # Make sure the new project dict has all the project keys
-  assert set(project_keys).issubset(r.keys()), "Project keys must be in new project"
-
-  # Name of new project must match in response
-  assert r['name'] == data['name'], "New project response must have the name we ordered" 
-
-  
-  # Get the newly created project
-  r = Project.get(r['project_id'])
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Get project must return a  dict"
-
-  # Make sure we have all the person keys
-  assert set(project_keys).issubset(r.keys()), "Project keys must be in project"
-
-  # Name of new project must match
-  assert r['name'] == data['name'], "New Project must have the name we ordered" 
-
-
-  # FIXME: Put random data in all fields?
-  # Set notes in dict of newly created project
-  new_notes = "JustTestingNotes"
-  r['notes'] = new_notes
-  
-  # Update the project with new notes
-  r = Project.update(r)
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Updated project must return a  dict"
-
-  # Make sure we have all the project keys
-  assert set(project_keys).issubset(r.keys()), "Project keys must be in updated project"
-
-  # Notes of update project must match
-  assert r['notes'] == new_notes, "Updated project must have new notes" 
-
-  
-  # Delete the project we just created
-  r = Project.delete(r['project_id'])
-  
-  # Makes sure we have a status code
-  assert isinstance(r, int), "Deletion must a status code integer"
-
-  # Response must be a 204 on successfull deletion
-  assert r == 204, "Successfull deletion must return status code 204"
-
-
-def test_project_invalid_id():
-  """
-  Get an invalid project
-  """
-  
-  r = Project.get(1)
-
-  assert isinstance(r, dict)
-  
-  assert r['status'] == 404, "Invalid project ID should not be found"
-
-
-def test_people_get_all(people_keys):
-  """
-  Get all people
-  """
-  
-  # Get all people (No ID supplied)
-  r = People.get()
-  
-  for p in r:
-    assert isinstance(p, dict), "Person list entries must be dicts"
-    assert set(people_keys).issubset(p.keys()), "All people keys must be in people"
-    assert isinstance(p['tags'], list), "People tags must be a list"
-
-
-def test_people_invalid_id():
-  """
-  Get an invalid person
-  """
-  
-  r = People.get(1)
-
-  assert isinstance(r, dict)
-  
-  assert r['status'] == 404, "Invalid people ID should not be found"
-
-
-def test_people_add(people_keys):
-  """
-  Add a new person
-  Get the new person
-  Update the new person
-  Delete the new person
-  """
-  
-  # The data for the new person
-  data = {
-    "name": "Mr. Foo Bar",
-    "notes": "Created by API for testing"
-    }
-
-  # Add a new person
-  r = People.add(data)
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Add person must return a  dict"
-
-  # Make sure the new person dict has all the people keys
-  assert set(people_keys).issubset(r.keys()), "People keys must be in new people"
-
-  # Name of new user must match in response
-  assert r['name'] == data['name'], "New person response must have the name we ordered" 
-
-
-  # Get the newly created user
-  r = People.get(r['people_id'])
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Get person must return a  dict"
-
-  # Make sure we have all the person keys
-  assert set(people_keys).issubset(r.keys()), "People keys must be in people"
-
-  # Name of new user must match
-  assert r['name'] == data['name'], "New person must have the name we ordered" 
-
-
-  # FIXME: Put random data in all fields?
-  # Set job_title in dict of newly created user
-  new_title = "JustTestingTitle"
-  r['job_title'] = new_title
-  
-  # Update the user with new title
-  r = People.update(r)
-
-  # Make sure we got a dict
-  assert isinstance(r, dict), "Updated person must return a  dict"
-
-  # Make sure we have all the person keys
-  assert set(people_keys).issubset(r.keys()), "People keys must be in updated people"
-
-  # Name of new user must match
-  assert r['job_title'] == new_title, "Updated person must have new job_title" 
-
-
-  # Delete the user we just created
-  r = People.delete(r['people_id'])
-  
-  # Makes sure we have a status code
-  assert isinstance(r, int), "Deletion must a status code integer"
-
-  # Reponse must be a 204 on successfull deletion
-  assert r == 204, "Successfull deletion must return status code 204"
 
