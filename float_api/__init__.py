@@ -1,10 +1,10 @@
 
-import os
-import requests
+#import os
+#import requests
 
 
 # Get access token from environment variable
-FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
+#FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 
 # The base URL af all calls to the Float API
 #base_url = 'https://api.float.com/v3/{}'
@@ -21,8 +21,8 @@ FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 
 
 # Create a new requests session
-session = requests.Session()
-headers = {"Authorization": "Bearer " + FLOAT_ACCESS_TOKEN}
+#session = requests.Session()
+#headers = {"Authorization": "Bearer " + FLOAT_ACCESS_TOKEN}
 
 
 # Import here, since Project needs the session

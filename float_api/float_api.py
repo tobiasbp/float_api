@@ -95,7 +95,7 @@ class FloatAPI():
     url = self.base_url.format(path)
 
     # Post
-    r = self.session.update(url, data=data, headers=self.headers)
+    r = self.session.patch(url, data=data, headers=self.headers)
 
     # Return data if request was a success.
     # Return empty dict otherwise
@@ -200,6 +200,23 @@ class FloatAPI():
     return self._post('projects', kwargs)
 
 
+  def create_task(self, **kwargs):
+
+    required_fields = [
+      'project_id',
+      'start_date',
+      'end_date',
+      'hours',
+      'people_id'
+      ]
+
+    for f in required_fields:
+      if f not in kwargs.keys():
+        raise KeyError('Missing required key \'{}\''.format(f))
+
+    return self._post('tasks', kwargs)
+
+
   ## UPDATE ##
   
   def update_account(self, **kwargs):
@@ -212,7 +229,7 @@ class FloatAPI():
     if 'client_id' not in kwargs.keys():
       raise KeyError('Missing required key \'client_id\'')
 
-    return self._patch('clients/{}'.format(kwargs['client_id']))
+    return self._patch('clients/{}'.format(kwargs['client_id']), kwargs)
 
 
   def update_person(self, **kwargs):
@@ -220,7 +237,7 @@ class FloatAPI():
     if 'people_id' not in kwargs.keys():
       raise KeyError('Missing required key \'people_id\'')
 
-    return self._patch('people/{}'.format(kwargs['people_id']))
+    return self._patch('people/{}'.format(kwargs['people_id']), kwargs)
 
 
   def update_project(self, **kwargs):
@@ -228,19 +245,19 @@ class FloatAPI():
     if 'project_id' not in kwargs.keys():
       raise KeyError('Missing required key \'project_id\'')
 
-    return self._patch('projects/{}'.format(kwargs['project_id']))
+    return self._patch('projects/{}'.format(kwargs['project_id']), kwargs)
 
 
   def update_task(self, **kwargs):
 
     if 'task_id' not in kwargs.keys():
-      raise KeyError('Missing required key \'task_id\'')
+      raise KeyError('Missing required key \'{}\''.format(f))
 
-    return self._patch('tasks/{}'.format(kwargs['task_id']))
+    return self._patch('tasks/{}'.format(kwargs['task_id']), kwargs)
 
 
   ## DELETE ##
-  
+
   def delete_account(self, account_id):
 
     raise NotImplementedError('Not possible with API')
@@ -259,3 +276,8 @@ class FloatAPI():
   def delete_project(self, project_id):
 
     return self._delete('projects/{}'.format(project_id))
+
+
+  def delete_task(self, task_id):
+
+    return self._delete('tasks/{}'.format(task_id))
