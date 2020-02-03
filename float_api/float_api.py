@@ -117,6 +117,11 @@ class FloatAPI():
     return self._get('clients/{}'.format(client_id), {})
 
 
+  def get_department(self, department_id):
+
+    return self._get('departments/{}'.format(department_id), {})
+
+
   def get_person(self, people_id):
 
     return self._get('people/{}'.format(people_id), {})
@@ -142,10 +147,13 @@ class FloatAPI():
 
 
   def get_all_clients(self):
-    """
-    Get all Float clients
-    """
+
     return self._get('clients', [])
+
+
+  def get_all_departments(self):
+
+    return self._get('departments', [])
 
 
   def get_all_people(self):
@@ -182,6 +190,14 @@ class FloatAPI():
       raise KeyError('Missing required key \'name\'')
 
     return self._post('clients', kwargs)
+
+
+  def create_department(self, **kwargs):
+
+    if 'name' not in kwargs.keys():
+      raise KeyError('Missing required key \'name\'')
+
+    return self._post('departments', kwargs)
 
 
   def create_person(self, **kwargs):
@@ -232,6 +248,14 @@ class FloatAPI():
     return self._patch('clients/{}'.format(kwargs['client_id']), kwargs)
 
 
+  def update_department(self, **kwargs):
+
+    if 'department_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'department_id\'')
+
+    return self._patch('departments/{}'.format(kwargs['department_id']), kwargs)
+
+
   def update_person(self, **kwargs):
 
     if 'people_id' not in kwargs.keys():
@@ -266,6 +290,11 @@ class FloatAPI():
   def delete_client(self, client_id):
 
     return self._delete('clients/{}'.format(client_id))
+
+
+  def delete_department(self, department_id):
+
+    return self._delete('departments/{}'.format(department_id))
 
 
   def delete_person(self, person_id):

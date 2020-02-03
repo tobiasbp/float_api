@@ -1,24 +1,35 @@
 import os
 
+# Import the API
 from float_api import FloatAPI
 
 # Get access token from environment variable
 FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 
-# Create a 
-f = FloatAPI(FLOAT_ACCESS_TOKEN)
+# Create an API object
+api = FloatAPI(FLOAT_ACCESS_TOKEN)
 
 print("All people:")
-for p in f.get_all_people():
+for p in api.get_all_people():
   print(p)
 
 print("All tasks:")
-for t in f.get_all_tasks():
+for t in api.get_all_tasks():
   print(t)
 
 print("All clients:")
-for t in f.get_all_clients():
+for t in api.get_all_clients():
   print(t)
+
+print("All departments:")
+for d in api.get_all_departments():
+  print(d)
+
+print("Get accounts:")
+for a in api.get_all_accounts():
+  print(a)
+
+
 
 # Create a project
 #project = f.create_project(name='Project FooBar ')

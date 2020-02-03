@@ -81,6 +81,12 @@ def client_keys():
     'client_id'
     ]
 
+def department_keys():
+  return [
+    'name',
+    'department_id'
+    ]
+
 def task_keys():
   return [
     'task_id',
@@ -234,12 +240,36 @@ def test_project():
   assert r == True, "Deleted project"
 
 
+# Create, update and delete a department
+def test_department():
+  
+  # Create a department
+  department = api.create_department(name=random_string(32))
+  assert isinstance(department, dict), "New department is a dict"
+  assert set(department_keys()).issubset(department.keys()), "New department has all keys"
+
+  # Update a department
+  name = random_string(32)
+  department = api.update_department(
+    department_id = department['department_id'],
+    name = name
+    )
+  assert isinstance(department, dict), "Updated department is a dict"
+  assert set(department_keys()).issubset(department.keys()), "Updated department has all keys"
+  assert department['name'] == name, "Name of department is updated"
+
+  # Delete department
+  r = api.delete_department(department['department_id'])
+  assert r == True, "Deleted department"
+
+
 # Test get all functions
 def test_get_all():
 
   functions = [
     (api.get_all_accounts, account_keys()),
     (api.get_all_clients, client_keys()),
+    (api.get_all_departments, department_keys()),
     (api.get_all_people, people_keys()),
     (api.get_all_projects, project_keys()),
     (api.get_all_tasks, task_keys())
