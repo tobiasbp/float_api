@@ -10,7 +10,9 @@ from float_api import FloatAPI
 # Get access token from environment variable
 FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 
-@fixture
+# Create a Float API instance
+api = FloatAPI(FLOAT_ACCESS_TOKEN)
+
 def account_keys():
   return [
     'account_id',
@@ -25,7 +27,6 @@ def account_keys():
     'modified'
     ]
 
-@fixture
 def project_keys():
   return [
     'project_id',
@@ -46,14 +47,12 @@ def project_keys():
     'modified'
     ]
 
-@fixture
 def project_tag_keys():
   return [
     'tag_name'
     'project_id'
     ]
 
-@fixture
 def people_keys():
   return [
     'people_id',
@@ -76,14 +75,12 @@ def people_keys():
     'modified'
     ]
 
-@fixture
 def client_keys():
   return [
     'name',
     'client_id'
     ]
 
-@fixture
 def task_keys():
   return [
     'task_id',
@@ -120,66 +117,29 @@ def random_string(length=32):
   # Return the random string
   return s
 
-# Create a Float API instance
-api = FloatAPI(FLOAT_ACCESS_TOKEN)
 
-# Test get all functions
-def test_get_all():
-
-  functions = [
-    (api.get_all_accounts, account_keys()),
-    (api.get_all_clients, client_keys()),
-    (api.get_all_people, people_keys()),
-    (api.get_all_projects, project_keys()),
-    (api.get_all_tasks, task_keys())
-    ]
+# Create, update and delete a client
+def test_client():
   
-  for func, keys in functions:
-    r = func()
-    assert isinstance(keys, list), "Keys is a list"
-    assert isinstance(r, list), "get all is a list"
+  # Create a client
+  client = api.create_client(name=random_string(32))
+  assert isinstance(client, dict), "New client is a dict"
+  assert set(client_keys()).issubset(client.keys()), "New client has all keys"
 
-    for c in r:
-      assert isinstance(c, dict), "Get all list item is a dict"
-      assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
+  # Update a client
+  name = random_string(32)
+  client = api.update_client(
+    client_id = client['client_id'],
+    name = name
+    )
+  assert isinstance(client, dict), "Updated client is a dict"
+  assert set(client_keys()).issubset(client.keys()), "Updated client has all keys"
+  assert client['name'] == name, "Name of client is updated"
 
-# Test creation, get'ing and deletion
-def test_create_get_delete():
+  # Delete client
+  r = api.delete_client(client['client_id'])
+  assert r == True, "Deleted client"
 
-  functions = [
-    (api.create_client, api.delete_client, api.get_client, client_keys(), 'client_id'),
-    (api.create_person, api.delete_person, api.get_person, people_keys(), 'people_id'),
-    (api.create_project, api.delete_project, api.get_project, project_keys(), 'project_id'),
-    ]
-  
-  for f_create, f_delete, f_get, keys, o_id in functions:
-    
-    # Create object
-    r = f_create(name=random_string(32))
-    
-    assert isinstance(keys, list), "Keys is a list"
-    assert isinstance(r, dict), "New object is a list is a list"
-    assert set(keys).issubset(r.keys()), "Dict has all keys" + str(f_create)
-
-    # Get object
-    created_object = r
-    
-    # Get the object we just created
-    r = f_get(created_object[o_id])
-    
-    # New object must have all keys
-    assert set(keys).issubset(r.keys()), "New objects has all keys" + str(f_get)
-
-    
-    # Person: People_type_id is updated after posting, so this fails
-    #assert created_object == r, "Get newly created object: {}".format(f_get) 
-    
-    # FIXME: Update
-
-    # Delete object
-    r = f_delete(r[o_id])
-    
-    assert r == True, "New object deleted" + str(f_delete)
 
 # Create, update and delete a task
 def test_task():
@@ -227,6 +187,7 @@ def test_task():
   r = api.delete_project(project['project_id'])
   assert r == True
 
+
 # Create, update and delete a person
 def test_person():
   
@@ -248,6 +209,7 @@ def test_person():
   # Delete person
   r = api.delete_person(person['people_id'])
   assert r == True, "Deleted person"
+
 
 # Create, update and delete a project
 def test_project():
@@ -272,25 +234,62 @@ def test_project():
   assert r == True, "Deleted project"
 
 
-# Create, update and delete a client
-def test_client():
+# Test get all functions
+def test_get_all():
+
+  functions = [
+    (api.get_all_accounts, account_keys()),
+    (api.get_all_clients, client_keys()),
+    (api.get_all_people, people_keys()),
+    (api.get_all_projects, project_keys()),
+    (api.get_all_tasks, task_keys())
+    ]
   
-  # Create a client
-  client = api.create_client(name=random_string(32))
-  assert isinstance(client, dict), "New client is a dict"
-  assert set(client_keys()).issubset(client.keys()), "New client has all keys"
+  for func, keys in functions:
+    r = func()
+    assert isinstance(keys, list), "Keys is a list"
+    assert isinstance(r, list), "get all is a list"
 
-  # Update a client
-  name = random_string(32)
-  client = api.update_client(
-    client_id = client['client_id'],
-    name = name
-    )
-  assert isinstance(client, dict), "Updated client is a dict"
-  assert set(client_keys()).issubset(client.keys()), "Updated client has all keys"
-  assert client['name'] == name, "Name of client is updated"
+    for c in r:
+      assert isinstance(c, dict), "Get all list item is a dict"
+      assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
 
-  # Delete client
-  r = api.delete_client(client['client_id'])
-  assert r == True, "Deleted client"
+
+# Test creation, get'ing and deletion
+def test_create_get_delete():
+
+  functions = [
+    (api.create_client, api.delete_client, api.get_client, client_keys(), 'client_id'),
+    (api.create_person, api.delete_person, api.get_person, people_keys(), 'people_id'),
+    (api.create_project, api.delete_project, api.get_project, project_keys(), 'project_id'),
+    ]
+  
+  for f_create, f_delete, f_get, keys, o_id in functions:
+    
+    # Create object
+    r = f_create(name=random_string(32))
+    
+    assert isinstance(keys, list), "Keys is a list"
+    assert isinstance(r, dict), "New object is a list is a list"
+    assert set(keys).issubset(r.keys()), "Dict has all keys" + str(f_create)
+
+    # Get object
+    created_object = r
+    
+    # Get the object we just created
+    r = f_get(created_object[o_id])
+    
+    # New object must have all keys
+    assert set(keys).issubset(r.keys()), "New objects has all keys" + str(f_get)
+
+    
+    # Person: People_type_id is updated after posting, so this fails
+    #assert created_object == r, "Get newly created object: {}".format(f_get) 
+    
+    # FIXME: Update
+
+    # Delete object
+    r = f_delete(r[o_id])
+    
+    assert r == True, "New object deleted" + str(f_delete)
 
