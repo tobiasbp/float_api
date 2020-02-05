@@ -29,8 +29,6 @@ print("Get accounts:")
 for a in api.get_all_accounts():
   print(a)
 
-
-
 # Create a project
 #project = f.create_project(name='Project FooBar ')
 

@@ -117,6 +117,25 @@ def milestone_keys():
     'end_date'
     ]
 
+def people_report_keys():
+  return [
+    'department_id',
+    'people_id',
+    'people_type_id',
+    'billable',
+    'nonBillable',
+    'scheduled',
+    'notScheduled',
+    'unscheduled',
+    'capacity',
+    'work_days_hours',
+    'overtime',
+    'name',
+    'timeoff'
+    ]
+
+
+
 def random_string(length=32):
   """
   Return a random string of ASCII letters and
@@ -251,7 +270,7 @@ def test_project():
 
 # Create, update and delete a department
 def test_department():
-  
+
   # Create a department
   department = api.create_department(name=random_string(32))
   assert isinstance(department, dict), "New department is a dict"
@@ -270,6 +289,26 @@ def test_department():
   # Delete department
   r = api.delete_department(department['department_id'])
   assert r == True, "Deleted department"
+
+
+# Test people reports
+def test_people_reports():
+
+  # Get all people
+  all_people = api.get_all_people()
+  assert isinstance(all_people, list), "All people is a list"
+
+  # Get reports
+  people_reports = api.get_people_reports(
+    start_date=date.today().isoformat(),
+    end_date=date.today().isoformat()
+    )
+  assert isinstance(people_reports, list), "People report is a list"
+  assert len(people_reports) == len(all_people), "No of people reports match no of people"
+
+  # Test keys in reports
+  for r in people_reports:
+    assert set(people_report_keys()).issubset(r.keys()), "People report has all keys"
 
 
 # Test get all functions

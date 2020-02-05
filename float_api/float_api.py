@@ -42,18 +42,19 @@ class FloatAPI():
       return False
 
 
-  def _get(self, path, error_object):
+  def _get(self, path, error_object, params = None):
     """
     Args:
       path: The string added to the base URL
       error_object: The object to return if status code is not 200
+      params: key,value pairs to send in URL
     """
 
     # Build the URL
     url = self.base_url.format(path)
 
     # Perform request
-    r = self.session.get(url, headers=self.headers)
+    r = self.session.get(url, headers=self.headers, params=params)
 
     # Return data if request was a success.
     # Return empty dict otherwise
@@ -132,9 +133,31 @@ class FloatAPI():
     return self._get('people/{}'.format(people_id), {})
 
 
+  def get_people_reports(self, start_date, end_date, people_id=None):
+    """
+    Returns a list of reports
+    """
+    params = {
+      'people_id': people_id,
+      'start_date': start_date,
+      'end_date': end_date
+    }
+
+    r = self._get('reports/people', {}, params)
+
+    # Return list in key 'people' of dict
+    # or empty list if key not present
+    return r.get('people', [])
+
+
   def get_project(self, project_id):
 
     return self._get('projects/{}'.format(project_id), {})
+
+
+  def get_task(self, task_id):
+
+    return self._get('tasks/{}'.format(task_id), {})
 
 
   def get_task(self, task_id):
