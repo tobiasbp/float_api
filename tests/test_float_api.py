@@ -108,6 +108,15 @@ def task_keys():
     'modified'
     ]
 
+def milestone_keys():
+  return [
+    'milestone_id',
+    'name',
+    'project_id',
+    'date',
+    'end_date'
+    ]
+
 def random_string(length=32):
   """
   Return a random string of ASCII letters and
@@ -177,8 +186,8 @@ def test_task():
     task_id = task['task_id'],
     notes = notes
     )
-  assert isinstance(task, dict), "New task is a dict"
-  assert set(task_keys()).issubset(task.keys()), "New task has all keys"
+  assert isinstance(task, dict), "Updated task is a dict"
+  assert set(task_keys()).issubset(task.keys()), "Updated task has all keys"
   assert task['notes'] == notes, "Notes of task are updated"
 
   # Delete test task
@@ -272,7 +281,8 @@ def test_get_all():
     (api.get_all_departments, department_keys()),
     (api.get_all_people, people_keys()),
     (api.get_all_projects, project_keys()),
-    (api.get_all_tasks, task_keys())
+    (api.get_all_tasks, task_keys()),
+    (api.get_all_milestones, milestone_keys())
     ]
   
   for func, keys in functions:
@@ -283,6 +293,41 @@ def test_get_all():
     for c in r:
       assert isinstance(c, dict), "Get all list item is a dict"
       assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
+
+# Test milestones
+def test_milestones():
+
+  # Create a project
+  project = api.create_project(name=random_string(32))
+  assert isinstance(project, dict), "New project is a dict"
+  assert set(project_keys()).issubset(project.keys()), "New project has all keys"
+
+  # Create a milestone
+  milestone = api.create_milestone(
+    name=random_string(32),
+    project_id=project['project_id'],
+    date=date.today().isoformat()
+    )
+  assert isinstance(milestone, dict), "New milestone is a dict"
+  assert set(milestone_keys()).issubset(milestone.keys()), "New milestone has all keys"
+
+  # Update name of milestone
+  name = random_string(32)
+  milestone = api.update_milestone(
+    milestone_id=milestone['milestone_id'],
+    name=name
+    )
+  assert isinstance(milestone, dict), "Updated milestone is a dict"
+  assert set(milestone_keys()).issubset(milestone.keys()), "Updated milestone has all keys"
+  assert milestone['name'] == name, "Name of milestone is updated"
+
+  # Delete milestone
+  r = api.delete_milestone(milestone['milestone_id'])
+  assert r == True, "Deleted milestone"
+
+  # Delete project
+  r = api.delete_project(project['project_id'])
+  assert r == True, "Deleted project"
 
 
 # Test creation, get'ing and deletion

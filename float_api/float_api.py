@@ -122,6 +122,11 @@ class FloatAPI():
     return self._get('departments/{}'.format(department_id), {})
 
 
+  def get_milestone(self, milestone_id):
+
+    return self._get('milestones/{}'.format(milestone_id), {})
+
+
   def get_person(self, people_id):
 
     return self._get('people/{}'.format(people_id), {})
@@ -154,6 +159,11 @@ class FloatAPI():
   def get_all_departments(self):
 
     return self._get('departments', [])
+
+
+  def get_all_milestones(self):
+
+    return self._get('milestones', [])
 
 
   def get_all_people(self):
@@ -198,6 +208,21 @@ class FloatAPI():
       raise KeyError('Missing required key \'name\'')
 
     return self._post('departments', kwargs)
+
+
+  def create_milestone(self, **kwargs):
+
+    required_fields = [
+      'project_id',
+      'name',
+      'date',
+      ]
+
+    for f in required_fields:
+      if f not in kwargs.keys():
+        raise KeyError('Missing required key \'{}\''.format(f))
+
+    return self._post('milestones', kwargs)
 
 
   def create_person(self, **kwargs):
@@ -256,6 +281,14 @@ class FloatAPI():
     return self._patch('departments/{}'.format(kwargs['department_id']), kwargs)
 
 
+  def update_milestone(self, **kwargs):
+
+    if 'milestone_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'milestone_id\'')
+
+    return self._patch('milestones/{}'.format(kwargs['milestone_id']), kwargs)
+
+
   def update_person(self, **kwargs):
 
     if 'people_id' not in kwargs.keys():
@@ -295,6 +328,11 @@ class FloatAPI():
   def delete_department(self, department_id):
 
     return self._delete('departments/{}'.format(department_id))
+
+
+  def delete_milestone(self, milestone_id):
+
+    return self._delete('milestones/{}'.format(milestone_id))
 
 
   def delete_person(self, person_id):
