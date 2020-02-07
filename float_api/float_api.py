@@ -245,7 +245,12 @@ class FloatAPI():
     return self._get('tasks', [])
 
 
-  def get_all_timeoff_type(self):
+  def get_all_timeoffs(self):
+
+    return self._get('timeoffs', [])
+
+
+  def get_all_timeoff_types(self):
 
     return self._get('timeoff-types', [])
 
@@ -337,6 +342,29 @@ class FloatAPI():
     return self._post('tasks', kwargs)
 
 
+  def create_timeoff(self, **kwargs):
+
+    required_fields = [
+      'timeoff_type_id',
+      'start_date',
+      'end_date',
+      'people_ids'
+      ]
+
+    # If full_day is not 1, we need field 'hours'
+    if kwargs.get('full_day', 0) == 0:
+      required_fields.append('hours')
+
+    for f in required_fields:
+      if f not in kwargs.keys():
+        raise KeyError('Missing required key \'{}\''.format(f))
+
+    if not isinstance(kwargs['people_ids'], list):
+      raise KeyError('Key \'{}\' not a list'.format('people_ids'))
+
+    return self._post('timeoffs', kwargs)
+
+
   def create_timeoff_type(self, **kwargs):
 
     if 'timeoff_type_name' not in kwargs.keys():
@@ -408,6 +436,14 @@ class FloatAPI():
     return self._patch('tasks/{}'.format(kwargs['task_id']), kwargs)
 
 
+  def update_timeoff(self, **kwargs):
+
+    if 'timeoff_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'{}\''.format('timeoff_id'))
+
+    return self._patch('timeoffs/{}'.format(kwargs['timeoff_id']), kwargs)
+
+
   def update_timeoff_type(self, **kwargs):
 
     if 'timeoff_type_id' not in kwargs.keys():
@@ -456,6 +492,11 @@ class FloatAPI():
   def delete_task(self, task_id):
 
     return self._delete('tasks/{}'.format(task_id))
+
+
+  def delete_timeoff(self, timeoff_id):
+
+    return self._delete('timeoffs/{}'.format(timeoff_id))
 
 
   def delete_timeoff_type(self, timeoff_type_id):
