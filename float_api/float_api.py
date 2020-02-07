@@ -123,6 +123,13 @@ class FloatAPI():
     return self._get('departments/{}'.format(department_id), {})
 
 
+  def get_holiday(self, holiday_id):
+
+    r =  self._get('holidays/{}'.format(holiday_id), {})
+    #return self._get('holidays/{}'.format(holiday_id), {})
+    print(r)
+    return r
+
   def get_milestone(self, milestone_id):
 
     return self._get('milestones/{}'.format(milestone_id), {})
@@ -155,6 +162,26 @@ class FloatAPI():
     return self._get('projects/{}'.format(project_id), {})
 
 
+  def get_project_reports(self, start_date, end_date, project_id=None):
+    """
+    Returns a list of project reports
+    """
+    # FIXME: I get status_code 422 on these request?
+    raise NotImplementedError()
+    '''
+    params = {
+      'project_id': project_id,
+      'start_date': start_date,
+      'end_date': end_date
+    }
+
+    r = self._get('reports/projects', {}, params)
+
+    # Return list in key 'projects' of dict
+    # or empty list if key not present
+    return r.get('projects', [])
+    '''
+
   def get_task(self, task_id):
 
     return self._get('tasks/{}'.format(task_id), {})
@@ -182,6 +209,11 @@ class FloatAPI():
   def get_all_departments(self):
 
     return self._get('departments', [])
+
+
+  def get_all_holidays(self):
+
+    return self._get('holidays', [])
 
 
   def get_all_milestones(self):
@@ -231,6 +263,22 @@ class FloatAPI():
       raise KeyError('Missing required key \'name\'')
 
     return self._post('departments', kwargs)
+
+
+  def create_holiday(self, **kwargs):
+    '''
+    date must be in the future
+    '''
+    required_fields = [
+      'name',
+      'date',
+      ]
+
+    for f in required_fields:
+      if f not in kwargs.keys():
+        raise KeyError('Missing required key \'{}\''.format(f))
+
+    return self._post('holidays', kwargs)
 
 
   def create_milestone(self, **kwargs):
@@ -304,6 +352,14 @@ class FloatAPI():
     return self._patch('departments/{}'.format(kwargs['department_id']), kwargs)
 
 
+  def update_holiday(self, **kwargs):
+
+    if 'holiday_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'holiday_id\'')
+
+    return self._patch('holidays/{}'.format(kwargs['holiday_id']), kwargs)
+
+
   def update_milestone(self, **kwargs):
 
     if 'milestone_id' not in kwargs.keys():
@@ -351,6 +407,11 @@ class FloatAPI():
   def delete_department(self, department_id):
 
     return self._delete('departments/{}'.format(department_id))
+
+
+  def delete_holiday(self, holiday_id):
+
+    return self._delete('holidays/{}'.format(holiday_id))
 
 
   def delete_milestone(self, milestone_id):

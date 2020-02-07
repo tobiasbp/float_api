@@ -3,6 +3,7 @@ import random
 import string
 import sys
 from datetime import date
+from datetime import timedelta
 
 from pytest import fixture
 from float_api import FloatAPI
@@ -128,13 +129,19 @@ def people_report_keys():
     'notScheduled',
     'unscheduled',
     'capacity',
-    'work_days_hours',
+    #'wk_day_hrs', Is in the documentation, but never returned?
     'overtime',
     'name',
     'timeoff'
     ]
 
-
+def holiday_keys():
+  return [
+    'holiday_id',
+    'name',
+    'date',
+    'end_date'
+    ]
 
 def random_string(length=32):
   """
@@ -173,6 +180,37 @@ def test_client():
   # Delete client
   r = api.delete_client(client['client_id'])
   assert r == True, "Deleted client"
+
+
+# Create, update and delete a holiday.
+# Holidays must be in the future
+# (Not past? Timezone diff between client & server is probably a factor)
+def test_holiday():
+
+  # Create a holiday (Must be in the future)
+  day_in_future = date.today() + timedelta(days=1)
+  holiday = api.create_holiday(
+    name=random_string(32),
+    date=day_in_future.isoformat()
+    )
+  assert isinstance(holiday, dict), "New holiday is a dict"
+  assert set(holiday_keys()).issubset(holiday.keys()), "New holiday has all keys"
+
+  # Update a holiday
+  name = random_string(32)
+  holiday = api.update_holiday(
+    holiday_id = holiday['holiday_id'],
+    name = name
+    )
+  assert isinstance(holiday, dict), "Updated holiday is a dict"
+  assert set(holiday_keys()).issubset(holiday.keys()), "Updated holiday has all keys"
+  assert holiday['name'] == name, "Name of holiday is updated"
+
+  # FIXME: Get all holidays
+
+  # Delete holiday
+  r = api.delete_holiday(holiday['holiday_id'])
+  assert r == True, "Deleted holiday"
 
 
 # Create, update and delete a task
@@ -299,9 +337,10 @@ def test_people_reports():
   assert isinstance(all_people, list), "All people is a list"
 
   # Get reports
+  future_date = date.today() + timedelta(weeks=4)
   people_reports = api.get_people_reports(
     start_date=date.today().isoformat(),
-    end_date=date.today().isoformat()
+    end_date=future_date.isoformat()
     )
   assert isinstance(people_reports, list), "People report is a list"
   assert len(people_reports) == len(all_people), "No of people reports match no of people"
@@ -332,6 +371,7 @@ def test_get_all():
     for c in r:
       assert isinstance(c, dict), "Get all list item is a dict"
       assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
+
 
 # Test milestones
 def test_milestones():
