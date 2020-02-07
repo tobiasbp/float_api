@@ -76,7 +76,8 @@ class FloatAPI():
 
     # Post
     r = self.session.post(url, data=data, headers=self.headers)
-
+    print(r.url)
+    print(r.status_code)
     # Return data if request was a success.
     # Return empty dict otherwise
     if r.status_code == 201:
@@ -130,6 +131,7 @@ class FloatAPI():
     print(r)
     return r
 
+
   def get_milestone(self, milestone_id):
 
     return self._get('milestones/{}'.format(milestone_id), {})
@@ -182,14 +184,15 @@ class FloatAPI():
     return r.get('projects', [])
     '''
 
-  def get_task(self, task_id):
-
-    return self._get('tasks/{}'.format(task_id), {})
-
 
   def get_task(self, task_id):
 
     return self._get('tasks/{}'.format(task_id), {})
+
+
+  def get_timeoff_type(self, timeoff_type_id):
+
+    return self._get('timeoff-types/{}'.format(timeoff_type_id), {})
 
 
   ## GET ALL ##
@@ -240,6 +243,11 @@ class FloatAPI():
     Get all Float tasks
     """
     return self._get('tasks', [])
+
+
+  def get_all_timeoff_type(self):
+
+    return self._get('timeoff-types', [])
 
 
   ## CREATE ##
@@ -329,6 +337,14 @@ class FloatAPI():
     return self._post('tasks', kwargs)
 
 
+  def create_timeoff_type(self, **kwargs):
+
+    if 'timeoff_type_name' not in kwargs.keys():
+      raise KeyError('Missing required key \'timeoff_type_name\'')
+
+    return self._post('timeoff-types', kwargs)
+
+
   ## UPDATE ##
   
   def update_account(self, **kwargs):
@@ -387,16 +403,24 @@ class FloatAPI():
   def update_task(self, **kwargs):
 
     if 'task_id' not in kwargs.keys():
-      raise KeyError('Missing required key \'{}\''.format(f))
+      raise KeyError('Missing required key \'{}\''.format('task_id'))
 
     return self._patch('tasks/{}'.format(kwargs['task_id']), kwargs)
+
+
+  def update_timeoff_type(self, **kwargs):
+
+    if 'timeoff_type_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'{}\''.format('timeoff_type'))
+
+    return self._patch('timeoff-types/{}'.format(kwargs['timeoff_type_id']), kwargs)
 
 
   ## DELETE ##
 
   def delete_account(self, account_id):
 
-    raise NotImplementedError('Not possible with API')
+    raise NotImplementedError('Not possible with Float API')
 
 
   def delete_client(self, client_id):
@@ -432,3 +456,10 @@ class FloatAPI():
   def delete_task(self, task_id):
 
     return self._delete('tasks/{}'.format(task_id))
+
+
+  def delete_timeoff_type(self, timeoff_type_id):
+
+    raise NotImplementedError('Not possible with Float API')
+
+    #return self._delete('timeoff-types/{}'.format(timeoff_type_id))

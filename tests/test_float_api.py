@@ -143,6 +143,14 @@ def holiday_keys():
     'end_date'
     ]
 
+def timeoff_type_keys():
+  return [
+    'timeoff_type_id',
+    'timeoff_type_name',
+    'color',
+    'created_by'
+    ]
+
 def random_string(length=32):
   """
   Return a random string of ASCII letters and
@@ -180,6 +188,31 @@ def test_client():
   # Delete client
   r = api.delete_client(client['client_id'])
   assert r == True, "Deleted client"
+
+# Create, update and delete a time_off_type
+def test_timeoff_type():
+
+  # Create a timeoff_type
+  timeoff_type = api.create_timeoff_type(
+    timeoff_type_name=random_string(32)
+    )
+  assert isinstance(timeoff_type, dict), "New timeoff_type is a dict"
+  assert set(timeoff_type_keys()).issubset(timeoff_type.keys()), "New timeoff_type has all keys"
+
+  # Update a timeoff_type
+  timeoff_type_name = random_string(32)
+  timeoff_type = api.update_timeoff_type(
+    timeoff_type_id = timeoff_type['timeoff_type_id'],
+    timeoff_type_name = timeoff_type_name
+    )
+  assert isinstance(timeoff_type, dict), "Updated timeoff_type is a dict"
+  assert set(timeoff_type_keys()).issubset(timeoff_type.keys()), "Updated timeoff_type has all keys"
+  assert timeoff_type['timeoff_type_name'] == timeoff_type_name, "Name of timeoff_type is updated"
+
+  # Delete timeoff_type
+  # This is not supported by the API!?
+  #r = api.delete_timeoff_type(timeoff_type['timeoff_type_id'])
+  #assert r == True, "Deleted timeoff_type"
 
 
 # Create, update and delete a holiday.
