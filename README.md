@@ -9,6 +9,7 @@ Float API at https://dev.float.com/api_reference.html
 To use the API, you must pass the FLOAT_ACCESS_TOKEN to the FloatAPI
 object when instantiating it.
 
+```python
   # Import the API
   from float_api import FloatAPI
   
@@ -17,11 +18,12 @@ object when instantiating it.
   
   # Get a list of all people
   p = api.get_all_people()
-
+```
 
 # Calls
 These are the calls implemented in this wrapper. If the input to a function
-is DATA, it means a list of relevant arguments. See the Float documentation
+is DATA, it means a list of relevant arguments. See the
+[Float documentation](https://dev.float.com/api_reference.html)
 for details. get_all_* calls returns lists, delete_* returns True or False.
 Other calls return dictionaries. On error, the wrapper will return empty
 lists, False and empty dictionaries respectively.
