@@ -1,4 +1,7 @@
 *.pyc
 .cache
+
+# pypi
 build
 dist
+float_api.egg-info

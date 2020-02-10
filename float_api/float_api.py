@@ -9,7 +9,6 @@ class ParameterMissingError(Exception):
 
 class FloatAPI():
 
-
   def __init__(self, access_token):
 
     # The session to use for all requests

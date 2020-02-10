@@ -2,8 +2,14 @@
 
 A Python wrapper of the project management service at float.com.
 
+There is an example of how to use the wrapper here:
+  https://github.com/tobiasbp/float_api/blob/master/demo.py
+
 The API is documented here:
-Float API at https://dev.float.com/api_reference.html
+  https://dev.float.com/api_reference.html
+
+To install with pip:
+  pip install float-api
 
 # Example of use
 To use the API, you must pass the FLOAT_ACCESS_TOKEN to the FloatAPI
