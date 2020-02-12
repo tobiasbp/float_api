@@ -8,6 +8,7 @@ setuptools.setup(
     version="0.0.5",
     author="Tobias Balle-Petersen",
     author_email="tobiasbp@gmail.com",
+    license="MIT",
     description="A wrapper for the API at float.com",
     keywords="Float api wrapper client",
     long_description=long_description,
