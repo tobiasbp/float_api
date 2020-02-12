@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="float_api",
-    version="0.0.5",
+    version="0.0.7",
     author="Tobias Balle-Petersen",
     author_email="tobiasbp@gmail.com",
     license="MIT",
