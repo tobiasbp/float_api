@@ -11,14 +11,12 @@ FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 # Create an API object
 api = FloatAPI(FLOAT_ACCESS_TOKEN)
 
-#print(api.create_timeoff_type(timeoff_type_name = 'FOOBAR'))
-
 print("All people:")
-for p in api.get_all_people():
+for p in api.get_all_people(fields='name,people_id'):
   print(p)
 
 print("All projects:")
-for p in api.get_all_projects():
+for p in api.get_all_projects(fields='name'):
   print(p)
 
 print("All tasks:")

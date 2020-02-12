@@ -204,6 +204,14 @@ def test_client():
   assert set(client_keys()).issubset(client.keys()), "Updated client has all keys"
   assert client['name'] == name, "Name of client is updated"
 
+  # Get a list of clients with a subset of fields
+  f = set(['name', 'client_id'])
+  assert f.issubset(client_keys()), "Fields must be valid"
+  clients = api.get_all_clients(fields=','.join(f))
+  for c in clients:
+    assert isinstance(c, dict), "Item in list is a dict"
+    assert f == c.keys(), "Item in list has wanted fields"
+
   # Delete client
   r = api.delete_client(client['client_id'])
   assert r == True, "Deleted client"
@@ -227,6 +235,14 @@ def test_timeoff_type():
   assert isinstance(timeoff_type, dict), "Updated timeoff_type is a dict"
   assert set(timeoff_type_keys()).issubset(timeoff_type.keys()), "Updated timeoff_type has all keys"
   assert timeoff_type['timeoff_type_name'] == timeoff_type_name, "Name of timeoff_type is updated"
+
+  # Get a list of timeoff_types with a subset of fields
+  f = set(['timeoff_type_name', 'timeoff_type_id'])
+  assert f.issubset(timeoff_type_keys()), "Fields must be valid"
+  timeoff_types = api.get_all_timeoff_types(fields=','.join(f))
+  for t in timeoff_types:
+    assert isinstance(t, dict), "Item in list is a dict"
+    assert f == t.keys(), "Item in list has wanted fields"
 
   # Get all timeoff_types
   timeoff_types = api.get_all_timeoff_types()
@@ -256,7 +272,7 @@ def test_timeoff():
   assert isinstance(person, dict), "New person is a dict"
   assert set(people_keys()).issubset(person.keys()), "New person has all keys"
 
-  # Create length hours timeoff
+  # Create timeoff
   day_in_future = date.today() + timedelta(weeks=2)
   timeoff_hours = api.create_timeoff(
     timeoff_type_id = timeoff_type['timeoff_type_id'],
@@ -267,6 +283,14 @@ def test_timeoff():
     )
   assert isinstance(timeoff_hours, dict), "New timeoff is a dict"
   assert set(timeoff_keys()).issubset(timeoff_hours.keys()), "New timeoff has all keys"
+
+  # Get a list of timeoffs with a subset of fields
+  f = set(['hours', 'timeoff_id'])
+  assert f.issubset(timeoff_keys()), "Fields must be valid"
+  timeoffs = api.get_all_timeoffs(fields=','.join(f))
+  for t in timeoffs:
+    assert isinstance(t, dict), "Item in list is a dict"
+    assert f == t.keys(), "Item in list has wanted fields"
 
   # Delete length hours timeoff
   r = api.delete_timeoff(timeoff_hours['timeoff_id'])
@@ -313,10 +337,11 @@ def test_timeoff():
 # Create, update and delete a holiday.
 # Holidays must be in the future
 # (Not past? Timezone diff between client & server is probably a factor)
+# Can not create a holiday if one exists on the same date
 def test_holiday():
 
   # Create a holiday (Must be in the future)
-  day_in_future = date.today() + timedelta(days=1)
+  day_in_future = date.today() + timedelta(days=14)
   holiday = api.create_holiday(
     name=random_string(32),
     date=day_in_future.isoformat()
@@ -334,7 +359,13 @@ def test_holiday():
   assert set(holiday_keys()).issubset(holiday.keys()), "Updated holiday has all keys"
   assert holiday['name'] == name, "Name of holiday is updated"
 
-  # FIXME: Get all holidays
+  # Get a list of holidays with a subset of fields
+  f = set(['name', 'holiday_id'])
+  assert f.issubset(holiday_keys()), "Fields must be holiday keys"
+  holidays = api.get_all_holidays(fields=','.join(f))
+  for h in holidays:
+    assert isinstance(h, dict), "Holiday in list is a dict"
+    assert f == h.keys(), "Holiday in list has wanted fields"
 
   # Delete holiday
   r = api.delete_holiday(holiday['holiday_id'])
@@ -375,6 +406,14 @@ def test_task():
   assert set(task_keys()).issubset(task.keys()), "Updated task has all keys"
   assert task['notes'] == notes, "Notes of task are updated"
 
+  # Get a list of tasks with a subset of fields
+  f = set(['name', 'task_id'])
+  assert f.issubset(task_keys()), "Fields must be task keys"
+  tasks = api.get_all_tasks(fields=','.join(f))
+  for t in tasks:
+    assert isinstance(t, dict), "Task in list is a dict"
+    assert f == t.keys(), "Task in list has wanted fields"
+
   # Delete test task
   r = api.delete_task(task['task_id'])
   assert r == True
@@ -406,6 +445,14 @@ def test_person():
   assert set(people_keys()).issubset(person.keys()), "Updated person has all keys"
   assert person['notes'] == notes, "Notes of person are updated"
 
+  # Get a list of people with a subset of fields
+  f = set(['name', 'people_id'])
+  assert f.issubset(people_keys()), "Fields must be person keys"
+  people = api.get_all_people(fields=','.join(f))
+  for p in people:
+    assert isinstance(p, dict), "Person in list is a dict"
+    assert f == p.keys(), "Person in list has wanted fields"
+  
   # Delete person
   r = api.delete_person(person['people_id'])
   assert r == True, "Deleted person"
@@ -429,6 +476,14 @@ def test_project():
   assert set(project_keys()).issubset(project.keys()), "Updated project has all keys"
   assert project['notes'] == notes, "Notes of project are updated"
 
+  # Get a list of projects with a subset of fields
+  f = set(['name', 'project_id'])
+  assert f.issubset(project_keys()), "Fields must be valid"
+  projects = api.get_all_projects(fields=','.join(f))
+  for p in projects:
+    assert isinstance(p, dict), "Item in list is a dict"
+    assert f == p.keys(), "Item in list has wanted fields"
+
   # Delete project
   r = api.delete_project(project['project_id'])
   assert r == True, "Deleted project"
@@ -451,6 +506,14 @@ def test_department():
   assert isinstance(department, dict), "Updated department is a dict"
   assert set(department_keys()).issubset(department.keys()), "Updated department has all keys"
   assert department['name'] == name, "Name of department is updated"
+
+  # Get a list of departments with a subset of fields
+  f = set(['name', 'department_id'])
+  assert f.issubset(department_keys()), "Fields must be valid"
+  departments = api.get_all_departments(fields=','.join(f))
+  for d in departments:
+    assert isinstance(d, dict), "Item in list is a dict"
+    assert f == d.keys(), "Item in list has wanted fields"
 
   # Delete department
   r = api.delete_department(department['department_id'])
@@ -527,6 +590,14 @@ def test_milestones():
   assert isinstance(milestone, dict), "Updated milestone is a dict"
   assert set(milestone_keys()).issubset(milestone.keys()), "Updated milestone has all keys"
   assert milestone['name'] == name, "Name of milestone is updated"
+
+  # Get a list of milestones with a subset of fields
+  f = set(['name', 'milestone_id'])
+  assert f.issubset(milestone.keys()), "Fields must be valid"
+  milestones = api.get_all_milestones(fields=','.join(f))
+  for m in milestones:
+    assert isinstance(m, dict), "Item in list is a dict"
+    assert f == m.keys(), "Item in list has wanted fields"
 
   # Delete milestone
   r = api.delete_milestone(milestone['milestone_id'])

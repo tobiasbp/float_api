@@ -1,11 +1,20 @@
 import requests
-# Import the requests session
-#from . import session
-#from . import headers
-#from . import base_url
 
-class ParameterMissingError(Exception):
+#class ParameterMissingError(Exception):
+#  pass
+
+class UnexpectedStatusCode(Exception):
+  """
+  Raise this error when a call to the API
+  returns a status code other than the one we expect
+  """
   pass
+
+class DataValidationError(Exception):
+  """
+  Raise this error if the API could not
+  validate the data we gave it
+  """
 
 class FloatAPI():
 
@@ -33,15 +42,14 @@ class FloatAPI():
     # Perform request
     r = self.session.delete(url, headers=self.headers)
 
-    # Return data if request was a success.
-    # Return empty dict otherwise
-    if r.status_code == 204:
-      return True
-    else:
-      return False
+    # Raise exception on unexpected status code
+    if r.status_code != 204:
+      raise UnexpectedStatusCode("Got {} but expected 204".format(r.status_code))
+
+    return True
 
 
-  def _get(self, path, error_object, params = None):
+  def _get(self, path, error_object, params = {}):
     """
     Args:
       path: The string added to the base URL
@@ -55,12 +63,70 @@ class FloatAPI():
     # Perform request
     r = self.session.get(url, headers=self.headers, params=params)
 
-    # Return data if request was a success.
-    # Return empty dict otherwise
-    if r.status_code == 200:
-      return r.json()
-    else:
-      return error_object
+    # Raise exception on unexpected status code
+    if r.status_code != 200:
+      raise UnexpectedStatusCode("Got {} but expected 200".format(r.status_code))
+
+    return r.json()
+
+
+  def _get_all_pages(self, path, error_object, params = {}):
+    """
+    Args:
+      path: The string added to the base URL
+      error_object: The object to return if status code is not 200
+      params: key,value pairs to send in URL
+      pagination: per-page (Default 50), page
+    """
+
+    # If key 'per_page' is in params, change to key to 'per-page'.
+    # Python does not allow '-' in variable names, but Float
+    # parameter is called 'per-page'
+    if 'per_page' in params.keys():
+      params['per-page'] = params.pop('per_page') 
+
+    # Set default objects per page
+    if 'per-page' not in params:
+      params['per-page'] = 50
+
+    # Set default objects per page
+    if 'page' not in params:
+      params['page'] = 1
+
+    # The list of data to return
+    list_to_return = []
+
+    # Build the URL
+    url = self.base_url.format(path)
+
+    # Perform request
+    while True:
+      # Request data
+      r = self.session.get(url, headers=self.headers, params=params)
+
+      # Throw AssertionError on unexpected status code
+      if r.status_code != 200:
+        raise UnexpectedStatusCode("Got {} but expected 200".format(r.status_code))
+
+      # Get the list returned by the request
+      l = r.json()
+
+      # Add the new list to the list of data to return
+      list_to_return += l
+
+      # Exit loop if we are on the last page of results
+      if int(r.headers['X-Pagination-Current-Page']) >= int(r.headers['X-Pagination-Page-Count']): 
+        break
+
+      # Next page
+      params['page'] += 1
+
+
+    # All records must be in the list to return
+    assert int(r.headers['X-Pagination-Total-Count']) == len(list_to_return), "Get all returns all records"
+
+    # Return the list of all records
+    return list_to_return
 
 
   def _post(self, path, data):
@@ -75,14 +141,16 @@ class FloatAPI():
 
     # Post
     r = self.session.post(url, data=data, headers=self.headers)
-    print(r.url)
-    print(r.status_code)
-    # Return data if request was a success.
-    # Return empty dict otherwise
-    if r.status_code == 201:
-      return r.json()
-    else:
-      return {}
+
+    # Raise exception if data could not be validated
+    if r.status_code == 422:
+      raise DataValidationError("API could not validate the data you posted" )
+
+    # Raise exception on unexpected status code
+    if r.status_code != 201:
+      raise UnexpectedStatusCode("Got {} but expected 201".format(r.status_code))
+
+    return r.json()
 
 
   def _patch(self, path, data):
@@ -98,12 +166,11 @@ class FloatAPI():
     # Post
     r = self.session.patch(url, data=data, headers=self.headers)
 
-    # Return data if request was a success.
-    # Return empty dict otherwise
-    if r.status_code == 200:
-      return r.json()
-    else:
-      return {}
+    # Raise exception on unexpected status code
+    if r.status_code != 200:
+      raise UnexpectedStatusCode("Got {} but expected 200".format(r.status_code))
+
+    return r.json()
 
 
   ## GET ##
@@ -196,62 +263,66 @@ class FloatAPI():
 
   ## GET ALL ##
 
-  def get_all_accounts(self):
+  def get_all_accounts(self, fields=[]):
     """
     Get all Float accounts
     """
-    return self._get('accounts', [])
+    params = {'fields': fields}
+    return self._get_all_pages('accounts', [], params)
 
 
-  def get_all_clients(self):
-
-    return self._get('clients', [])
-
-
-  def get_all_departments(self):
-
-    return self._get('departments', [])
+  def get_all_clients(self, fields=[]):
+    params = {'fields': fields}
+    return self._get_all_pages('clients', [], params)
 
 
-  def get_all_holidays(self):
-
-    return self._get('holidays', [])
-
-
-  def get_all_milestones(self):
-
-    return self._get('milestones', [])
+  def get_all_departments(self, fields=[]):
+    params = {'fields': fields}
+    return self._get_all_pages('departments', [], params)
 
 
-  def get_all_people(self):
+  def get_all_holidays(self, fields=[]):
+    params = {'fields': fields}
+    return self._get_all_pages('holidays', [], params)
+
+
+  def get_all_milestones(self, fields=[]):
+    params = {'fields': fields}
+    return self._get_all_pages('milestones', [], params)
+
+
+  def get_all_people(self, fields=[]):
     """
     Get all Float people
     """
-    return self._get('people', [])
+    params = {'fields': fields}
+    return self._get_all_pages('people', [], params)
 
 
-  def get_all_projects(self):
+  def get_all_projects(self, fields=[]):
     """
     Get all Float clients
     """
-    return self._get('projects', [])
+    params = {'fields': fields}
+    return self._get_all_pages('projects', [], params)
 
 
-  def get_all_tasks(self):
+  def get_all_tasks(self, fields=[]):
     """
     Get all Float tasks
     """
-    return self._get('tasks', [])
+    params = {'fields': fields}
+    return self._get_all_pages('tasks', [], params)
 
 
-  def get_all_timeoffs(self):
+  def get_all_timeoffs(self, fields=[]):
+    params = {'fields': fields}
+    return self._get_all_pages('timeoffs', [], params)
 
-    return self._get('timeoffs', [])
 
-
-  def get_all_timeoff_types(self):
-
-    return self._get('timeoff-types', [])
+  def get_all_timeoff_types(self, fields=[]):
+    params = {'fields': fields}
+    return self._get_all_pages('timeoff-types', [], params)
 
 
   ## CREATE ##
@@ -279,7 +350,7 @@ class FloatAPI():
 
   def create_holiday(self, **kwargs):
     '''
-    date must be in the future
+    Invalid if a holiday on the same day exists
     '''
     required_fields = [
       'name',
