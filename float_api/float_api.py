@@ -549,9 +549,9 @@ class FloatAPI():
     return self._delete('milestones/{}'.format(milestone_id))
 
 
-  def delete_person(self, person_id):
+  def delete_person(self, people_id):
 
-    return self._delete('people/{}'.format(person_id))
+    return self._delete('people/{}'.format(people_id))
 
 
   def delete_project(self, project_id):
