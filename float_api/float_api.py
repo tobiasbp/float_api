@@ -19,6 +19,9 @@ class DataValidationError(Exception):
 class FloatAPI():
 
   def __init__(self, access_token, application_name, contact_email):
+    '''
+    https://dev.float.com/overview_authentication.html
+    '''
 
     # The session to use for all requests
     self.session = requests.Session()
@@ -79,7 +82,7 @@ class FloatAPI():
       path: The string added to the base URL
       error_object: The object to return if status code is not 200
       params: key,value pairs to send in URL
-      pagination: per-page (Default 50), page
+      pagination: per-page (Default 200), page
     """
 
     # If key 'per_page' is in params, change to key to 'per-page'.
@@ -90,7 +93,7 @@ class FloatAPI():
 
     # Set default objects per page
     if 'per-page' not in params:
-      params['per-page'] = 50
+      params['per-page'] = 200
 
     # Set default objects per page
     if 'page' not in params:
