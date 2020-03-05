@@ -12,7 +12,11 @@ from float_api import FloatAPI
 FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 
 # Create a Float API instance
-api = FloatAPI(FLOAT_ACCESS_TOKEN)
+api = FloatAPI(
+  FLOAT_ACCESS_TOKEN,
+  'Unit testing of Python API wrapper float-api',
+  'float-api-wrapper-unit-test@example.com'
+  )
 
 def account_keys():
   return [

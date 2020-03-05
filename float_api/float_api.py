@@ -18,13 +18,16 @@ class DataValidationError(Exception):
 
 class FloatAPI():
 
-  def __init__(self, access_token):
+  def __init__(self, access_token, application_name, contact_email):
 
     # The session to use for all requests
     self.session = requests.Session()
 
     # Headers to send with every request
-    self.headers = {"Authorization": "Bearer " + access_token}
+    self.headers = {
+      "Authorization": "Bearer {}".format(access_token),
+      "User-Agent": "{} ({})".format(application_name, contact_email)
+      }
 
     # The base URL af all calls to the Float API
     self.base_url = 'https://api.float.com/v3/{}'
