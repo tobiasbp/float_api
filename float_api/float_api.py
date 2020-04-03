@@ -187,37 +187,37 @@ class FloatAPI():
 
 
   def get_client(self, client_id):
-
+    '''Get a client'''
     return self._get('clients/{}'.format(client_id), {})
 
 
   def get_department(self, department_id):
-
+    '''Get a department'''
     return self._get('departments/{}'.format(department_id), {})
 
 
   def get_holiday(self, holiday_id):
-
-    r =  self._get('holidays/{}'.format(holiday_id), {})
-    #return self._get('holidays/{}'.format(holiday_id), {})
-    print(r)
-    return r
+    '''Get a holiday'''
+    return self._get('holidays/{}'.format(holiday_id), {})
 
 
   def get_milestone(self, milestone_id):
-
+    '''Get a milestone'''
     return self._get('milestones/{}'.format(milestone_id), {})
 
 
-  def get_person(self, people_id):
+  def get_project_milestones(self, project_id):
+    '''Get a list of milestones for project_id'''
+    return self._get('milestones', {}, {'project_id': project_id})
 
+
+  def get_person(self, people_id):
+    '''Get a person'''
     return self._get('people/{}'.format(people_id), {})
 
 
   def get_people_reports(self, start_date, end_date, people_id=None):
-    """
-    Returns a list of reports
-    """
+    '''Get people reports'''
     params = {
       'people_id': people_id,
       'start_date': start_date,
@@ -232,7 +232,7 @@ class FloatAPI():
 
 
   def get_project(self, project_id):
-
+    '''Get a project'''
     return self._get('projects/{}'.format(project_id), {})
 
 
@@ -258,75 +258,73 @@ class FloatAPI():
 
 
   def get_task(self, task_id):
-
+    '''Get a task'''
     return self._get('tasks/{}'.format(task_id), {})
 
 
   def get_timeoff_type(self, timeoff_type_id):
-
+    '''Get a timeoff type'''
     return self._get('timeoff-types/{}'.format(timeoff_type_id), {})
 
 
   ## GET ALL ##
 
   def get_all_accounts(self, fields=[]):
-    """
-    Get all Float accounts
-    """
+    '''Get all Float accounts'''
     params = {'fields': fields}
     return self._get_all_pages('accounts', [], params)
 
 
   def get_all_clients(self, fields=[]):
+    '''Get all clients'''
     params = {'fields': fields}
     return self._get_all_pages('clients', [], params)
 
 
   def get_all_departments(self, fields=[]):
+    '''Get all departments'''
     params = {'fields': fields}
     return self._get_all_pages('departments', [], params)
 
 
   def get_all_holidays(self, fields=[]):
+    '''Get all holidays'''
     params = {'fields': fields}
     return self._get_all_pages('holidays', [], params)
 
 
   def get_all_milestones(self, fields=[]):
+    '''Get all milestones'''
     params = {'fields': fields}
     return self._get_all_pages('milestones', [], params)
 
 
   def get_all_people(self, fields=[]):
-    """
-    Get all Float people
-    """
+    '''Get all people'''
     params = {'fields': fields}
     return self._get_all_pages('people', [], params)
 
 
   def get_all_projects(self, fields=[]):
-    """
-    Get all Float clients
-    """
+    '''Get all clients'''
     params = {'fields': fields}
     return self._get_all_pages('projects', [], params)
 
 
   def get_all_tasks(self, fields=[]):
-    """
-    Get all Float tasks
-    """
+    '''Get all tasks'''
     params = {'fields': fields}
     return self._get_all_pages('tasks', [], params)
 
 
   def get_all_timeoffs(self, fields=[]):
+    '''Get all timeoffs'''
     params = {'fields': fields}
     return self._get_all_pages('timeoffs', [], params)
 
 
   def get_all_timeoff_types(self, fields=[]):
+    '''Get all timeoff types'''
     params = {'fields': fields}
     return self._get_all_pages('timeoff-types', [], params)
 
@@ -339,7 +337,7 @@ class FloatAPI():
 
 
   def create_client(self, **kwargs):
-
+    '''Create a client'''
     if 'name' not in kwargs.keys():
       raise KeyError('Missing required key \'name\'')
 
@@ -347,7 +345,7 @@ class FloatAPI():
 
 
   def create_department(self, **kwargs):
-
+    '''Create a department'''
     if 'name' not in kwargs.keys():
       raise KeyError('Missing required key \'name\'')
 
