@@ -9,7 +9,7 @@ from float_api import FloatAPI
 FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 
 # Create an API object
-api = FloatAPI(FLOAT_ACCESS_TOKEN)
+api = FloatAPI(FLOAT_ACCESS_TOKEN, 'my_api_demo', 'me@example.org')
 
 print("All people:")
 for p in api.get_all_people(fields='name,people_id'):

@@ -146,7 +146,7 @@ class FloatAPI():
     url = self.base_url.format(path)
 
     # Post
-    r = self.session.post(url, data=data, headers=self.headers)
+    r = self.session.post(url, json=data, headers=self.headers)
 
     # Raise exception if data could not be validated
     if r.status_code == 422:
@@ -170,7 +170,7 @@ class FloatAPI():
     url = self.base_url.format(path)
 
     # Post
-    r = self.session.patch(url, data=data, headers=self.headers)
+    r = self.session.patch(url, json=data, headers=self.headers)
 
     # Raise exception on unexpected status code
     if r.status_code != 200:
