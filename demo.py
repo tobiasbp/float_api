@@ -24,26 +24,29 @@ for t in api.get_all_tasks():
   print(t)
 
 print("All clients:")
-for t in api.get_all_clients():
-  print(t)
+for c in api.get_all_clients():
+  print(c)
 
 print("All departments:")
 for d in api.get_all_departments():
   print(d)
 
-print("Get accounts:")
+print("All accounts:")
 for a in api.get_all_accounts():
   print(a)
 
 # Create a project
-#project = f.create_project(name='Project FooBar ')
+#project = api.create_project(name='Project FooBar ')
+#print(project)
 
 # Delete a project
-#result = f.delete_project(project['project_id'])
+#result = api.delete_project(project['project_id'])
+#print(result)
 
 # Create a client
-#client = f.create_client("Client FooBar")
+#client = api.create_client("Client FooBar")
+#print(client)
 
 # Delete a client
-#result = f.delete_client(client['client_id'])
-
+#result = api.delete_client(client['client_id'])
+#print(result)
