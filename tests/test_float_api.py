@@ -124,19 +124,34 @@ def milestone_keys():
 
 def people_report_keys():
   return [
-    'department_id',
+    'name',
     'people_id',
+    'department_id',
     'people_type_id',
+    'capacity',
+    'timeoff',
+    'scheduled',
     'billable',
     'nonBillable',
-    'scheduled',
-    'notScheduled',
-    'unscheduled',
-    'capacity',
-    #'wk_day_hrs', Is in the documentation, but never returned?
     'overtime',
+    'futureScheduled',
+    'futureBillable',
+    'futureNonBillable',
+    'futureOvertime',
+    'unscheduled'
+    ]
+
+def project_report_keys():
+  return [
+    'scheduled',
+    'billable',
+    'nonBillable',
     'name',
-    'timeoff'
+    'project_id',
+    'client_id',
+    'futureScheduled',
+    'futureBillable',
+    'futureNonBillable'
     ]
 
 def holiday_keys():
@@ -173,6 +188,7 @@ def timeoff_type_keys():
     'color',
     'created_by'
     ]
+
 
 def random_string(length=32):
   """
@@ -538,11 +554,31 @@ def test_people_reports():
     end_date=future_date.isoformat()
     )
   assert isinstance(people_reports, list), "People report is a list"
-  #assert len(people_reports) == len(all_people), "No of people reports match no of people"
+  assert len(people_reports) == len(all_people), "No of people reports match no of people"
 
   # Test keys in reports
   for r in people_reports:
     assert set(people_report_keys()).issubset(r.keys()), "People report has all keys"
+
+# Test project reports
+def test_project_reports():
+
+  # Get all projects
+  all_projects = api.get_all_projects()
+  assert isinstance(all_projects, list), "All projects is a list"
+
+  # Get reports
+  future_date = date.today() + timedelta(weeks=4)
+  project_reports = api.get_project_reports(
+    start_date=date.today().isoformat(),
+    end_date=future_date.isoformat()
+    )
+  assert isinstance(project_reports, list), "Project report is a list"
+  assert len(project_reports) == len(all_projects), "No of project reports match no of project"
+
+  # Test keys in reports
+  for r in project_reports:
+    assert set(project_report_keys()).issubset(r.keys()), "Project report has all keys"
 
 
 # Test get all functions

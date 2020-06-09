@@ -1,5 +1,6 @@
 *.pyc
 .cache
+.setup.py.swp
 
 # pypi
 build

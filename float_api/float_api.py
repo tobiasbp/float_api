@@ -1,3 +1,4 @@
+import re
 import requests
 
 #class ParameterMissingError(Exception):
@@ -34,6 +35,9 @@ class FloatAPI():
 
     # The base URL af all calls to the Float API
     self.base_url = 'https://api.float.com/v3/{}'
+
+    # A regular expression for matching dates
+    self.date_re = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 
 
   def _delete(self, path):
@@ -238,11 +242,15 @@ class FloatAPI():
 
   def get_project_reports(self, start_date, end_date, project_id=None):
     """
-    Returns a list of project reports
+    Returns a list of project reports. If a project_id is supplied,
+    only a single report is returned.
     """
-    # FIXME: I get status_code 422 on these request?
-    raise NotImplementedError()
-    '''
+    if not self.date_re.match(start_date):
+        raise ValueError("Invalid start_date: {}".format(start_date))
+
+    if not self.date_re.match(end_date):
+        raise ValueError("Invalid end_date: {}".format(end_date))
+
     params = {
       'project_id': project_id,
       'start_date': start_date,
@@ -254,7 +262,30 @@ class FloatAPI():
     # Return list in key 'projects' of dict
     # or empty list if key not present
     return r.get('projects', [])
-    '''
+
+
+  def get_people_reports(self, start_date, end_date, people_id=None):
+    """
+    Returns a list of people reports. If a people_id is supplied,
+    only a single report is returned.
+    """
+    if not self.date_re.match(start_date):
+        raise ValueError("Invalid start_date: {}".format(start_date))
+
+    if not self.date_re.match(end_date):
+        raise ValueError("Invalid end_date: {}".format(end_date))
+
+    params = {
+      'project_id': people_id,
+      'start_date': start_date,
+      'end_date': end_date
+    }
+
+    r = self._get('reports/people', {}, params)
+
+    # Return list in key 'people' of dict
+    # or empty list if key not present
+    return r.get('people', [])
 
 
   def get_task(self, task_id):

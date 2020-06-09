@@ -16,14 +16,14 @@ To use the API, you must pass the FLOAT_ACCESS_TOKEN to the FloatAPI
 object when instantiating it.
 
 
-  # Import the API
-  from float_api import FloatAPI
-  
-  # Instantiate API object
-  api = FloatAPI(FLOAT_ACCESS_TOKEN)
-  
-  # Get a list of all people
-  p = api.get_all_people()
+    # Import the API
+    from float_api import FloatAPI
+    
+    # Instantiate API object
+    api = FloatAPI(FLOAT_ACCESS_TOKEN)
+    
+    # Get a list of all people
+    p = api.get_all_people()
 
 
 # Calls
@@ -46,6 +46,7 @@ lists, False and empty dictionaries respectively.
 ## People
 
 * get_all_people()
+* get_people_reports(start_date, end_date, [people_id])
 * create_person(data)
 * get_person(people_id)
 * update_person(data)
@@ -55,6 +56,7 @@ lists, False and empty dictionaries respectively.
 ## Projects
 
 * get_all_projects()
+* get_project_reports(start_date, end_date, [project_id])
 * create_project(data)
 * get_project(project_id)
 * update_project(data)
@@ -78,3 +80,6 @@ lists, False and empty dictionaries respectively.
 * delete_timeoff_type(timeoff_type_id)
 
 
+# Testing
+
+Test the wrapper with _pytest_ 

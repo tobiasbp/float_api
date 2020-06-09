@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 from datetime import date
 from datetime import timedelta
@@ -11,27 +13,35 @@ FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
 # Create an API object
 api = FloatAPI(FLOAT_ACCESS_TOKEN, 'my_api_demo', 'me@example.org')
 
-print("All people:")
+print("\nPeople:")
 for p in api.get_all_people(fields='name,people_id'):
   print(p)
 
-print("All projects:")
+print("\nPeople reports:")
+for r in api.get_people_reports("2020-06-01", "2020-07-01"):
+  print(r)
+
+print("\nProjects:")
 for p in api.get_all_projects(fields='name'):
   print(p)
 
-print("All tasks:")
+print("\nProject reports:")
+for r in api.get_project_reports("2020-06-01", "2020-07-01"):
+  print(r.keys())
+
+print("\nAll tasks:")
 for t in api.get_all_tasks():
   print(t)
 
-print("All clients:")
+print("\nAll clients:")
 for c in api.get_all_clients():
   print(c)
 
-print("All departments:")
+print("\nAll departments:")
 for d in api.get_all_departments():
   print(d)
 
-print("All accounts:")
+print("\nAll accounts:")
 for a in api.get_all_accounts():
   print(a)
 
