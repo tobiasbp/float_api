@@ -289,7 +289,7 @@ class FloatAPI():
 
 
   def get_task(self, task_id):
-    '''Get a task'''
+    '''Get a single task by ID.'''
     return self._get('tasks/{}'.format(task_id), {})
 
 
@@ -342,9 +342,23 @@ class FloatAPI():
     return self._get_all_pages('projects', [], params)
 
 
-  def get_all_tasks(self, fields=[]):
-    '''Get all tasks'''
-    params = {'fields': fields}
+  def get_all_tasks(self, start_date=None, end_date=None, fields=[]):
+    '''Get all tasks. Optional date limits.'''
+
+    # Validate start date
+    if start_date and not self.date_re.match(start_date):
+      raise ValueError("Invalid start_date: {}".format(start_date))
+
+    # Validate end date
+    if end_date and not self.date_re.match(end_date):
+      raise ValueError("Invalid end_date: {}".format(end_date))
+
+    params = {
+      'fields': fields,
+      'start_date': start_date,
+      'end_date': end_date
+    }
+
     return self._get_all_pages('tasks', [], params)
 
 
