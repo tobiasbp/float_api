@@ -13,14 +13,17 @@ To install with pip:
 
 # Example of use
 To use the API, you must pass the FLOAT_ACCESS_TOKEN to the FloatAPI
-object when instantiating it.
+object when instantiating it. You must also supply a string of your
+own choice to use as _User-Agent_ as well as an email address where
+you can be contacted. Read the documentation
+[here](https://dev.float.com/overview_authentication.html).
 
 
     # Import the API
     from float_api import FloatAPI
     
     # Instantiate API object
-    api = FloatAPI(FLOAT_ACCESS_TOKEN)
+    api = FloatAPI(FLOAT_ACCESS_TOKEN, 'My user agent', 'me@example.org')
     
     # Get a list of all people
     p = api.get_all_people()
@@ -33,6 +36,7 @@ is DATA, it means a list of relevant arguments. See the
 for details. get_all_* calls returns lists, delete_* returns True or False.
 Other calls return dictionaries. On error, the wrapper will return empty
 lists, False and empty dictionaries respectively.
+
 
 ## Clients
 
@@ -65,11 +69,12 @@ lists, False and empty dictionaries respectively.
 
 ## Tasks
 
-* get_all_tasks()
+* get_all_tasks([start_date],[end_date])
 * create_task(data)
 * get_task(task_id)
 * update_task(data)
 * delete_task(task_id)
+
 
 ## Time off types
 
@@ -82,4 +87,4 @@ lists, False and empty dictionaries respectively.
 
 # Testing
 
-Test the wrapper with _pytest_ 
+Test the wrapper by running _pytest_ in the repository's root directory.
