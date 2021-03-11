@@ -276,7 +276,7 @@ class FloatAPI():
         raise ValueError("Invalid end_date: {}".format(end_date))
 
     params = {
-      'project_id': people_id,
+      'people_id': people_id,
       'start_date': start_date,
       'end_date': end_date
     }
