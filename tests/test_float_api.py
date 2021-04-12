@@ -122,6 +122,24 @@ def milestone_keys():
     'end_date'
     ]
 
+def phase_keys():
+  return [
+    'phase_id',
+    'project_id',
+    'name',
+    'start_date',
+    'end_date',
+    'color',
+    'notes',
+    'budget_total',
+    'default_hourly_rate',
+    'non_billable',
+    'tentative',
+    'active',
+    'created',
+    'modified'
+  ]
+
 def people_report_keys():
   return [
     'billable',
@@ -594,7 +612,8 @@ def test_get_all():
     (api.get_all_people, people_keys()),
     (api.get_all_projects, project_keys()),
     (api.get_all_tasks, task_keys()),
-    (api.get_all_milestones, milestone_keys())
+    (api.get_all_milestones, milestone_keys()),
+    (api.get_all_phases, phase_keys())
     ]
   
   for func, keys in functions:
@@ -689,3 +708,45 @@ def test_create_get_delete():
     
     assert r == True, "New object deleted" + str(f_delete)
 
+# Create, update and delete a phase
+def test_phase():
+
+  # Create a test project
+  project = api.create_project(name=random_string(32))
+  assert isinstance(project, dict), "New project is a dict"
+  assert set(project_keys()).issubset(project.keys()), "New project has all keys"
+
+  # Create a test phase
+  phase = api.create_phase(
+    project_id = project['project_id'],
+    name=random_string(32), 
+    start_date = date.today().isoformat(),
+    end_date = date.today().isoformat()
+  )
+  assert isinstance(phase, dict), "New phase is a dict"
+  assert set(phase_keys()).issubset(phase.keys()), "New phase has all keys"
+
+ # Get a phase
+  phase = api.get_phase(
+    phase_id = phase['phase_id']
+    )
+  assert isinstance(phase, dict), "Phase is a dict"
+  assert set(phase_keys()).issubset(phase.keys()), "Phase has all keys"
+
+ # Update a phase
+  name = random_string(32)
+  phase = api.update_phase(
+    phase_id = phase['phase_id'],
+    name = name
+    )
+  assert isinstance(phase, dict), "Updated phase is a dict"
+  assert set(phase_keys()).issubset(phase.keys()), "Updated phase has all keys"
+  assert phase['name'] == name, "Name of phase is updated"
+
+  # Delete test phase
+  r = api.delete_phase(phase['phase_id'])
+  assert r == True
+
+  # Delete test project
+  r = api.delete_project(project['project_id'])
+  assert r == True
