@@ -716,11 +716,6 @@ def test_phase():
   assert isinstance(project, dict), "New project is a dict"
   assert set(project_keys()).issubset(project.keys()), "New project has all keys"
 
-  # Create a test person
-  person = api.create_person(name=random_string(32))
-  assert isinstance(person, dict), "New person is a dict"
-  assert set(people_keys()).issubset(person.keys()), "New person has all keys"
-
   # Create a test phase
   phase = api.create_phase(
     project_id = project['project_id'],
@@ -745,15 +740,11 @@ def test_phase():
     name = name
     )
   assert isinstance(phase, dict), "Updated phase is a dict"
-  assert set(phase_keys()).issubset(phase.keys()), "Updated client has all keys"
-  assert phase['name'] == name, "Name of client is updated"
+  assert set(phase_keys()).issubset(phase.keys()), "Updated phase has all keys"
+  assert phase['name'] == name, "Name of phase is updated"
 
   # Delete test phase
   r = api.delete_phase(phase['phase_id'])
-  assert r == True
-
-  # Delete test person
-  r = api.delete_person(person['people_id'])
   assert r == True
 
   # Delete test project
