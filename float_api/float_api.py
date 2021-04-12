@@ -288,6 +288,11 @@ class FloatAPI():
     return r.get('people', [])
 
 
+  def get_phase(self, phase_id):
+    '''Get a phase'''
+    return self._get('phases/{}'.format(phase_id), {})
+
+
   def get_task(self, task_id):
     '''Get a single task by ID.'''
     return self._get('tasks/{}'.format(task_id), {})
@@ -334,6 +339,12 @@ class FloatAPI():
     '''Get all people'''
     params = {'fields': fields}
     return self._get_all_pages('people', [], params)
+
+
+  def get_all_phases(self, fields=[]):
+    '''Get all phases'''
+    params = {'fields': fields}
+    return self._get_all_pages('phases', [], params)
 
 
   def get_all_projects(self, fields=[]):
@@ -434,6 +445,22 @@ class FloatAPI():
       raise KeyError('Missing required key \'name\'')
     
     return self._post('people', kwargs)
+
+
+  def create_phase(self, **kwargs):
+
+    required_fields = [
+      'project_id',
+      'name',
+      'start_date',
+      'end_date'
+      ]
+
+    for f in required_fields:
+      if f not in kwargs.keys():
+        raise KeyError('Missing required key \'{}\''.format(f))
+
+    return self._post('phases', kwargs)
 
 
   def create_project(self, **kwargs):
@@ -539,6 +566,14 @@ class FloatAPI():
     return self._patch('people/{}'.format(kwargs['people_id']), kwargs)
 
 
+  def update_phase(self, **kwargs):
+
+    if 'phase_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'phase_id\'')
+
+    return self._patch('phases/{}'.format(kwargs['phase_id']), kwargs)
+
+
   def update_project(self, **kwargs):
 
     if 'project_id' not in kwargs.keys():
@@ -601,6 +636,11 @@ class FloatAPI():
   def delete_person(self, people_id):
 
     return self._delete('people/{}'.format(people_id))
+
+
+  def delete_phase(self, phase_id):
+
+    return self._delete('phases/{}'.format(phase_id))
 
 
   def delete_project(self, project_id):

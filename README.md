@@ -56,6 +56,13 @@ lists, False and empty dictionaries respectively.
 * update_person(data)
 * delete_person(people_id)
 
+## Phases
+
+* create_phase(data)
+* get_phase(phase_id)
+* update_phase(data)
+* delete_phase(phase_id)
+
 
 ## Projects
 
