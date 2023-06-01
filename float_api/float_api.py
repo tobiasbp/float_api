@@ -53,7 +53,7 @@ class FloatAPI():
     r = self.session.delete(url, headers=self.headers)
 
     # Raise exception on unexpected status code
-    if r.status_code != 204:
+    if not r.status_code in [204,200]:
       raise UnexpectedStatusCode("Got {} but expected 204".format(r.status_code))
 
     return True
