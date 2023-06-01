@@ -1,6 +1,7 @@
 import re
 import requests
 
+
 #class ParameterMissingError(Exception):
 #  pass
 
@@ -93,7 +94,7 @@ class FloatAPI():
     # Python does not allow '-' in variable names, but Float
     # parameter is called 'per-page'
     if 'per_page' in params.keys():
-      params['per-page'] = params.pop('per_page') 
+      params['per-page'] = params.pop('per_page')
 
     # Set default objects per page
     if 'per-page' not in params:
@@ -125,7 +126,7 @@ class FloatAPI():
       list_to_return += l
 
       # Exit loop if we are on the last page of results
-      if int(r.headers['X-Pagination-Current-Page']) >= int(r.headers['X-Pagination-Page-Count']): 
+      if int(r.headers['X-Pagination-Current-Page']) >= int(r.headers['X-Pagination-Page-Count']):
         break
 
       # Next page
@@ -184,7 +185,7 @@ class FloatAPI():
 
 
   ## GET ##
-  
+
   def get_account(self, account_id):
 
     raise NotImplementedError('Not possible with API')
@@ -292,11 +293,14 @@ class FloatAPI():
     '''Get a phase'''
     return self._get('phases/{}'.format(phase_id), {})
 
+  def get_logged_time(self, logged_time_id):
+    '''Get a single logged time by ID.'''
+    return self._get('logged-time/{}'.format(logged_time_id), {})
+
 
   def get_task(self, task_id):
     '''Get a single task by ID.'''
     return self._get('tasks/{}'.format(task_id), {})
-
 
   def get_timeoff_type(self, timeoff_type_id):
     '''Get a timeoff type'''
@@ -373,6 +377,18 @@ class FloatAPI():
     return self._get_all_pages('tasks', [], params)
 
 
+  def get_all_logged_time(self, people_id=None, project_id=None, fields=[]):
+    '''Get all logged time'''
+    params = {'fields': fields}
+
+    if people_id:
+      params.update({'people_id': people_id})
+
+    if project_id:
+      params.update({'project_id': project_id})
+
+    return self._get_all_pages('logged-time', [], params)
+
   def get_all_timeoffs(self, fields=[]):
     '''Get all timeoffs'''
     params = {'fields': fields}
@@ -443,7 +459,7 @@ class FloatAPI():
 
     if 'name' not in kwargs.keys():
       raise KeyError('Missing required key \'name\'')
-    
+
     return self._post('people', kwargs)
 
 
@@ -518,9 +534,27 @@ class FloatAPI():
 
     return self._post('timeoff-types', kwargs)
 
+  def create_logged_time(self, **kwargs):
+
+    required_fields = [
+      'project_id',
+      'date',
+      'hours',
+      'people_ids'
+      ]
+
+    for f in required_fields:
+      if f not in kwargs.keys():
+        raise KeyError('Missing required key \'{}\''.format(f))
+
+    if not isinstance(kwargs['people_ids'], list):
+      raise KeyError('Key \'{}\' not a list'.format('people_ids'))
+
+    return self._post('timeoff-types', kwargs)
+
 
   ## UPDATE ##
-  
+
   def update_account(self, **kwargs):
 
     raise NotImplementedError('Not possible with API')
@@ -601,9 +635,16 @@ class FloatAPI():
   def update_timeoff_type(self, **kwargs):
 
     if 'timeoff_type_id' not in kwargs.keys():
-      raise KeyError('Missing required key \'{}\''.format('timeoff_type'))
+      raise KeyError('Missing required key \'{}\''.format('timeoff_type_id'))
 
     return self._patch('timeoff-types/{}'.format(kwargs['timeoff_type_id']), kwargs)
+
+  def update_logged_time(self, **kwargs):
+
+    if 'logged_time_id' not in kwargs.keys():
+      raise KeyError('Missing required key \'{}\''.format('logged_time_id'))
+
+    return self._patch('logged-time/{}'.format(kwargs['logged_time_id']), kwargs)
 
 
   ## DELETE ##
@@ -662,4 +703,6 @@ class FloatAPI():
 
     raise NotImplementedError('Not possible with Float API')
 
-    #return self._delete('timeoff-types/{}'.format(timeoff_type_id))
+  def delete_logged_time(self, logged_time_id):
+
+    return self._delete('logged-time/{}'.format(logged_time_id))
