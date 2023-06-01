@@ -125,15 +125,15 @@ class FloatAPI():
       list_to_return += l
 
       # Exit loop if we are on the last page of results
-      if int(r.headers['X-Pagination-Current-Page']) >= int(r.headers['X-Pagination-Page-Count']): 
+      if int(r.headers.get('X-Pagination-Current-Page',0)) >= int(r.headers.get('X-Pagination-Page-Count',0)):
         break
 
       # Next page
       params['page'] += 1
 
-
-    # All records must be in the list to return
-    assert int(r.headers['X-Pagination-Total-Count']) == len(list_to_return), "Get all returns all records"
+    # All records must be in the list to return, if multiple pages found.
+    if int(r.headers.get('X-Pagination-Page-Count',1)) > 1:
+        assert int(r.headers['X-Pagination-Total-Count']) == len(list_to_return), "Get all returns all records"
 
     # Return the list of all records
     return list_to_return
