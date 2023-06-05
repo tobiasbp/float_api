@@ -21,10 +21,10 @@ you can be contacted. Read the documentation
 
     # Import the API
     from float_api import FloatAPI
-    
+
     # Instantiate API object
     api = FloatAPI(FLOAT_ACCESS_TOKEN, 'My user agent', 'me@example.org')
-    
+
     # Get a list of all people
     p = api.get_all_people()
 
@@ -90,6 +90,14 @@ lists, False and empty dictionaries respectively.
 * get_timeoff_type(timeoff_type_id)
 * update_timeoff_type(data)
 * delete_timeoff_type(timeoff_type_id)
+
+## Logged Time
+
+* get_all_logged_time()
+* create_logged_time(data)
+* get_logged_time(logged_time_id)
+* update_logged_time(data)
+* delete_logged_time(logged_time_id)
 
 
 # Testing

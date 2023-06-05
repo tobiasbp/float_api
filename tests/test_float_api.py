@@ -113,6 +113,26 @@ def task_keys():
     'modified'
     ]
 
+def loggedtime_keys():
+  return [
+    'logged_time_id',
+    'date',
+    'notes',
+    'hours',
+    'billable',
+    'people_id',
+    'project_id',
+    'phase_id',
+    'task_id',
+    'task_name',
+    'locked',
+    'locked_date',
+    'created',
+    'created_by',
+    'modified_by',
+    'modified'
+  ]
+
 def milestone_keys():
   return [
     'milestone_id',
@@ -216,18 +236,18 @@ def random_string(length=32):
   """
   # The random string
   s = ''
-  
+
   # Add a number of random samples
   for i in range(length):
     s += random.choice(string.ascii_letters + string.digits)
-  
+
   # Return the random string
   return s
 
 
 # Create, update and delete a client
 def test_client():
-  
+
   # Create a client
   client = api.create_client(name=random_string(32))
   assert isinstance(client, dict), "New client is a dict"
@@ -465,10 +485,64 @@ def test_task():
   r = api.delete_project(project['project_id'])
   assert r == True
 
+# Create, update and delete a task
+def test_loggedtime():
+
+  # Create a test project
+  project = api.create_project(name=random_string(32))
+  assert isinstance(project, dict), "New project is a dict"
+  assert set(project_keys()).issubset(project.keys()), "New project has all keys"
+
+  # Create a test person
+  person = api.create_person(name=random_string(32))
+  assert isinstance(person, dict), "New person is a dict"
+  assert set(people_keys()).issubset(person.keys()), "New person has all keys"
+
+  # Create a test task
+  logged_time = api.create_logged_time(
+    project_id = project['project_id'],
+    date = date.today().isoformat(),
+    hours = 8,
+    notes= random_string(32),
+    people_id = person['people_id']
+    )
+  assert isinstance(task, dict), "New Logged Time is a dict"
+  assert set(loggedtime_keys()()).issubset(logged_time.keys()), "New Logged Time has all keys"
+
+  # Update notes of test task
+  notes = random_string(64)
+  logged_time = api.update_logged_time(
+    logged_time_id = logged_time['logged_time_id'],
+    notes = notes
+    )
+  assert isinstance(task, dict), "Updated task is a dict"
+  assert set(loggedtime_keys()()).issubset(logged_time.keys()), "Updated Logged Time has all keys"
+  assert logged_time['notes'] == notes, "Notes of Logged Time are updated"
+
+  # Get a list of tasks with a subset of fields
+  f = set(['name', 'logged_time_id'])
+  assert f.issubset(loggedtime_keys()()), "Fields must be Logged Time keys"
+  logged_times = api.get_all_logged_time(fields=','.join(f))
+  for t in logged_times:
+    assert isinstance(t, dict), "Logged Time in list is a dict"
+    assert f == t.keys(), "Logged Time in list has wanted fields"
+
+  # Delete test task
+  r = api.delete_logged_time(logged_time['logged_time_id'])
+  assert r == True
+
+  # Delete test person
+  r = api.delete_person(person['people_id'])
+  assert r == True
+
+  # Delete test project
+  r = api.delete_project(project['project_id'])
+  assert r == True
+
 
 # Create, update and delete a person
 def test_person():
-  
+
   # Create a person
   person = api.create_person(name=random_string(32))
   assert isinstance(person, dict), "New person is a dict"
@@ -491,7 +565,7 @@ def test_person():
   for p in people:
     assert isinstance(p, dict), "Person in list is a dict"
     assert f == p.keys(), "Person in list has wanted fields"
-  
+
   # Delete person
   r = api.delete_person(person['people_id'])
   assert r == True, "Deleted person"
@@ -499,7 +573,7 @@ def test_person():
 
 # Create, update and delete a project
 def test_project():
-  
+
   # Create a project
   project = api.create_project(name=random_string(32))
   assert isinstance(project, dict), "New project is a dict"
@@ -612,10 +686,11 @@ def test_get_all():
     (api.get_all_people, people_keys()),
     (api.get_all_projects, project_keys()),
     (api.get_all_tasks, task_keys()),
+    (api.get_all_logged_time(), loggedtime_keys()),
     (api.get_all_milestones, milestone_keys()),
     (api.get_all_phases, phase_keys())
     ]
-  
+
   for func, keys in functions:
     r = func()
     assert isinstance(keys, list), "Keys is a list"
@@ -678,34 +753,34 @@ def test_create_get_delete():
     (api.create_person, api.delete_person, api.get_person, people_keys(), 'people_id'),
     (api.create_project, api.delete_project, api.get_project, project_keys(), 'project_id'),
     ]
-  
+
   for f_create, f_delete, f_get, keys, o_id in functions:
-    
+
     # Create object
     r = f_create(name=random_string(32))
-    
+
     assert isinstance(keys, list), "Keys is a list"
     assert isinstance(r, dict), "New object is a list is a list"
     assert set(keys).issubset(r.keys()), "Dict has all keys" + str(f_create)
 
     # Get object
     created_object = r
-    
+
     # Get the object we just created
     r = f_get(created_object[o_id])
-    
+
     # New object must have all keys
     assert set(keys).issubset(r.keys()), "New objects has all keys" + str(f_get)
 
-    
+
     # Person: People_type_id is updated after posting, so this fails
-    #assert created_object == r, "Get newly created object: {}".format(f_get) 
-    
+    #assert created_object == r, "Get newly created object: {}".format(f_get)
+
     # FIXME: Update
 
     # Delete object
     r = f_delete(r[o_id])
-    
+
     assert r == True, "New object deleted" + str(f_delete)
 
 # Create, update and delete a phase
@@ -719,7 +794,7 @@ def test_phase():
   # Create a test phase
   phase = api.create_phase(
     project_id = project['project_id'],
-    name=random_string(32), 
+    name=random_string(32),
     start_date = date.today().isoformat(),
     end_date = date.today().isoformat()
   )
