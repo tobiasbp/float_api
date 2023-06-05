@@ -27,6 +27,15 @@ class FloatAPI():
     # The session to use for all requests
     self.session = requests.Session()
 
+    retry_strategy = requests.packages.urllib3.util.retry.Retry(
+      total=10,
+      backoff_factor=2,
+      status_forcelist=[429, 500, 502, 503, 504],
+      method_whitelist=["GET", "POST", "PATCH", "DELETE"]
+    )
+    adapter = requests.adapters.HTTPAdapter(max_retries=retry_strategy)
+    self.session.mount("https://", adapter)
+
     # Headers to send with every request
     self.headers = {
       "Authorization": "Bearer {}".format(access_token),
@@ -53,7 +62,7 @@ class FloatAPI():
     r = self.session.delete(url, headers=self.headers)
 
     # Raise exception on unexpected status code
-    if r.status_code != 204:
+    if not r.status_code in [204,200]:
       raise UnexpectedStatusCode("Got {} but expected 204".format(r.status_code))
 
     return True
@@ -93,7 +102,7 @@ class FloatAPI():
     # Python does not allow '-' in variable names, but Float
     # parameter is called 'per-page'
     if 'per_page' in params.keys():
-      params['per-page'] = params.pop('per_page') 
+      params['per-page'] = params.pop('per_page')
 
     # Set default objects per page
     if 'per-page' not in params:
@@ -184,7 +193,7 @@ class FloatAPI():
 
 
   ## GET ##
-  
+
   def get_account(self, account_id):
 
     raise NotImplementedError('Not possible with API')
@@ -443,7 +452,7 @@ class FloatAPI():
 
     if 'name' not in kwargs.keys():
       raise KeyError('Missing required key \'name\'')
-    
+
     return self._post('people', kwargs)
 
 
@@ -520,7 +529,7 @@ class FloatAPI():
 
 
   ## UPDATE ##
-  
+
   def update_account(self, **kwargs):
 
     raise NotImplementedError('Not possible with API')
