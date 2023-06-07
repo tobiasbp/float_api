@@ -1,0 +1,403 @@
+interactions:
+- request:
+    body: '{"timeoff_type_name": "ViqrRjP4Tid3EdFvz7xMuVKmxDM0cuw8"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '57'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/timeoff-types
+  response:
+    body:
+      string: '{"timeoff_type_id":527425,"timeoff_type_name":"ViqrRjP4Tid3EdFvz7xMuVKmxDM0cuw8","color":null,"created_by":776471,"active":1,"approval_required":1}'
+    headers:
+      Content-Length:
+      - '147'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:17 GMT
+      Location:
+      - https://api.float.com/v3/timeoff-types/527425
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"name": "U3ILcJj4WRiSKUT2vCrLEad4EGgVjCDJ"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '44'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/people
+  response:
+    body:
+      string: '{"people_id":18032396,"name":"U3ILcJj4WRiSKUT2vCrLEad4EGgVjCDJ","email":null,"job_title":null,"department":null,"notes":null,"avatar_file":"https://floatcdn.com/icons/avatar1-80.png","auto_email":-1,"employee_type":1,"work_days_hours":null,"work_days_hours_history":null,"non_work_days":null,"work_day_hours":null,"people_type_id":1,"region_id":79699,"contractor":0,"start_date":null,"end_date":null,"active":1,"created":"2023-06-07
+        09:35:17","modified":"2023-06-07 09:35:17","tags":[],"default_hourly_rate":null}'
+    headers:
+      Content-Length:
+      - '513'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:17 GMT
+      Location:
+      - https://api.float.com/v3/people/18032396
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"timeoff_type_id": 527425, "start_date": "2023-06-07", "end_date": "2023-06-21",
+      "hours": 4, "people_ids": [18032396]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '119'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/timeoffs
+  response:
+    body:
+      string: '{"timeoff_id":16769164,"timeoff_type_id":527425,"timeoff_type_name":"ViqrRjP4Tid3EdFvz7xMuVKmxDM0cuw8","start_date":"2023-06-07","end_date":"2023-06-21","start_time":null,"hours":4,"timeoff_notes":null,"modified_by":776471,"created_by":776471,"created":"2023-06-07
+        09:35:17","modified":"2023-06-07 09:35:17","repeat_state":0,"repeat_end":null,"full_day":null,"people_ids":[18032396],"status":2,"status_note":null,"status_creator_id":null}'
+    headers:
+      Content-Length:
+      - '438'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:17 GMT
+      Location:
+      - https://api.float.com/v3/timeoffs/16769164
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/timeoffs?fields=hours%2Ctimeoff_id&per-page=200&page=1
+  response:
+    body:
+      string: '[{"timeoff_id":16769164,"hours":4}]'
+    headers:
+      Content-Length:
+      - '35'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:17 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '1'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/timeoffs/16769164
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:18 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+- request:
+    body: '{"timeoff_type_id": 527425, "start_date": "2023-06-07", "end_date": "2023-06-21",
+      "full_day": 1, "people_ids": [18032396]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '122'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/timeoffs
+  response:
+    body:
+      string: '{"timeoff_id":16769165,"timeoff_type_id":527425,"timeoff_type_name":"ViqrRjP4Tid3EdFvz7xMuVKmxDM0cuw8","start_date":"2023-06-07","end_date":"2023-06-21","start_time":null,"hours":null,"timeoff_notes":null,"modified_by":776471,"created_by":776471,"created":"2023-06-07
+        09:35:18","modified":"2023-06-07 09:35:18","repeat_state":0,"repeat_end":null,"full_day":1,"people_ids":[18032396],"status":2,"status_note":null,"status_creator_id":null}'
+    headers:
+      Content-Length:
+      - '438'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:18 GMT
+      Location:
+      - https://api.float.com/v3/timeoffs/16769165
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"timeoff_id": 16769165, "timeoff_notes": "KGiZAJNvqZ6MEo8E4yg4aNPnOhs5Utsw"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/timeoffs/16769165
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA21R3U6DMBh9FdNrlpQCLfTOxGniwlyM7mKLIbgWVwOUlbINje/uB1oSF2+a9px+
+        56f9RFZVUhdFpgTiPmU08WnkTajtGzlSEWEhuSTqvJKIo7U6mMf3VfikRDAXt8cPdk679aI636R4
+        151i5KHW5sZmIrfDfYJJMMN0hhkwshaXOPGnicEO8borSw/tdWdad3A5am0lgGhxpzbX98vjYUPT
+        uY7nYf8W5stV/bBvo2fbnkCx0kIVSorstUecMRoy30M7I8H8X8xZubk/ya9wwoOI+0M5IxsYyCDx
+        UANPAFRzGgWsUBNMQL+RuimHZ4XgWz/GAQkS+jJWth1gxG3Hdk7iFxrDaTN+yk/gr29yWbB+xQEA
+        AA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:18 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/timeoffs?per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3VRXU+DMBT9K6bPLCkFWuibidPEhbkY3cOWheBaXA1QVso2NP53LziILvrS3J57
+        ez5u1x/IqkLqLEuUQNyljEYuDZwRtW0l+1ZAmE8uG2VaSMTRUu3N49vCf1LCm4rbwzs7xc1yVpxu
+        YrxtjiFyUG1TYxOR2m6eYOJNMJ1gBh1ZikucuOOLTg7xsslzB+10Y+rhMvgotZUAotmdWl3fzw/7
+        FY2nOpz67aufzhflw64Onm19BMZCC5UpKZKXFnHGqM9cB22NBPE/sV9Or3DEvYC74Q+ifweMrIAh
+        gQhdLjwCkHXwn8EJuUEVBCupq7zbMyRZuyH2iBfRTb8D2wBGhrKPO1Ccod6tNv0vfSf43HwBXcMH
+        KdgBAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:18 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '1'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/timeoffs/16769165
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:18 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+- request:
+    body: '{"people_id": 18032396, "active": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '36'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/people/18032396
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA11RQU7DMBD8Ctpz0jhJaZtcS4UoPQGFA0KWiZ3UxbEtZ1MUIf6O0zZB7XFmd2fG
+        4x+wwlglqOSQxwuSJmk2C0CzWkAO2/RhU6z307cn+fy4fUkOS7dZMT5d3Vev++XdGgIQNZMKct0q
+        FcDefFKUqMRAcGGZw1poHBhtUDQDYAeGzNFS9hewQ7RNHkWlMgwLrieFqSNZGN1Ep8U4XJCJ1ZW3
+        ZS0aevYO4z6GVaYTgmJnvZZnvo37opx1Dd2Z1o2WVzTdyQaN6/7jaTquXN9cKp2L6w1P7QXgRCW9
+        QI/m2SzLAvDp0bHCW0BOAmj8K9BL4diQ0PwC+115EMflwgk/4MOkNlyWsseQkCQNySwk8xuS5emt
+        /znfCbLKh3v/6GsvWavwmFd11I36v3+4VOFB8AEAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:18 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/people/18032396
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:19 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+version: 1

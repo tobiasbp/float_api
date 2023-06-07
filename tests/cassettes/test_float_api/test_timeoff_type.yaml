@@ -1,0 +1,238 @@
+interactions:
+- request:
+    body: '{"timeoff_type_name": "rz5rlR3e4gqSJCxfc4QVTu1CAtx3COOg"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '57'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/timeoff-types
+  response:
+    body:
+      string: '{"timeoff_type_id":527424,"timeoff_type_name":"rz5rlR3e4gqSJCxfc4QVTu1CAtx3COOg","color":null,"created_by":776471,"active":1,"approval_required":1}'
+    headers:
+      Content-Length:
+      - '147'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:16 GMT
+      Location:
+      - https://api.float.com/v3/timeoff-types/527424
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"timeoff_type_id": 527424, "timeoff_type_name": "rz5rlR3e4gqSJCxfc4QVTu1CAtx3COOg
+      updated"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '92'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/timeoff-types/527424
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA1WMsQ6CMBRFf8W8maVQbNLNsLkQ1Lg2lb6SJoWWl5aAxn8XRrd7z825H0huxGCt
+        SltE5QzIuhS85MX/MOkRQQK9a/K3Cvkw36/NanvePR+ZNZe0Vk3bDqccjU5ooIA++EAgp+z9XggP
+        rF4bSCHOXLACdJ/csp8eMUYKi/aKcM6Odl+y7w8uyvqQmwAAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:16 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/timeoff-types?fields=timeoff_type_name%2Ctimeoff_type_id&per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        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
+        GAAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:17 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '75'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/timeoff-types?per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:17 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '75'
+    status:
+      code: 200
+      message: OK
+version: 1

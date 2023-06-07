@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/accounts?per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA2WPX2uDMBTFv0rJs9PYuFryNGhfdRTcwxijZMnVpssf0avFjX33ZUph6+BCuL9z
+        77knL59ESOkHh0etCM/zTZanEXHCAuFkL0atVjtvjLckImCFNgGrH/wgZxxLHw/vQURt4cO7sOYG
+        YyIiRoGiC9MnxLbnSVIbL1AqFzZssqh9UlTPabkvpvDS8vw0lbvs8lgVrKwkK88HVhzi1jXB/poS
+        pzacSGcAfU84jYiCVnRoIci1NgjdNcM/Yf7koo0aLsdONyfsZz9QGn/3b4Nq4A8REvW4HJcdCITg
+        RdZ0ze7oJtSKbjnL+X0a0lqvdK1vB1LGsy2nG/L1+g10MZrzeAEAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:24 GMT
+      Link:
+      - <https://api.float.com/v3/accounts?per-page=200&page=1>; rel=self, <https://api.float.com/v3/accounts?per-page=200&page=1>;
+        rel=first, <https://api.float.com/v3/accounts?per-page=200&page=1>; rel=last
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '1'
+    status:
+      code: 200
+      message: OK
+version: 1

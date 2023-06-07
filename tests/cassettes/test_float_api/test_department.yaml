@@ -1,0 +1,143 @@
+interactions:
+- request:
+    body: '{"name": "FmwFrgxpDBUXl3h3H1h0Q0xNsH2t1gzN"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '44'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/departments
+  response:
+    body:
+      string: '{"department_id":16907331,"parent_id":null,"name":"FmwFrgxpDBUXl3h3H1h0Q0xNsH2t1gzN"}'
+    headers:
+      Content-Length:
+      - '85'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:23 GMT
+      Location:
+      - https://api.float.com/v3/departments/16907331
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"department_id": 16907331, "name": "New Name 123"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/departments/16907331
+  response:
+    body:
+      string: '{"department_id":16907331,"parent_id":null,"name":"New Name 123"}'
+    headers:
+      Content-Length:
+      - '65'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:23 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/departments?fields=name%2Cdepartment_id&per-page=200&page=1
+  response:
+    body:
+      string: '[{"department_id":16907331,"name":"New Name 123"}]'
+    headers:
+      Content-Length:
+      - '50'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:23 GMT
+      Link:
+      - <https://api.float.com/v3/departments?fields=name%2Cdepartment_id&per-page=200&page=1>;
+        rel=self, <https://api.float.com/v3/departments?fields=name%2Cdepartment_id&per-page=200&page=1>;
+        rel=first, <https://api.float.com/v3/departments?fields=name%2Cdepartment_id&per-page=200&page=1>;
+        rel=last
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '1'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/departments/16907331
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:23 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+version: 1
