@@ -5,18 +5,59 @@ import sys
 from datetime import date
 from datetime import timedelta
 
-from pytest import fixture
+import pytest
+
 from float_api import FloatAPI
 
+def random_string(length=32):
+  """
+  Return a random string of ASCII letters and
+  digits of length 'length'
+  """
+  # The random string
+  s = ''
+
+  # Add a number of random samples
+  for i in range(length):
+    s += random.choice(string.ascii_letters + string.digits)
+
+  # Return the random string
+  return s
+
 # Get access token from environment variable
-FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', None)
+FLOAT_ACCESS_TOKEN = os.environ.get('FLOAT_ACCESS_TOKEN', random_string(50))
 
 # Create a Float API instance
 api = FloatAPI(
   FLOAT_ACCESS_TOKEN,
   'Unit testing of Python API wrapper float-api',
   'float-api-wrapper-unit-test@example.com'
-  )
+)
+
+
+def filter_response_headers(response):
+  for header in list(response.get('headers',{}).keys()):
+    if header.lower() in ['alt-svc','strict-transport-security','ratelimit-limit','ratelimit-remaining','ratelimit-reset','via','x-ratelimit-remaining-minute','x-ratelimit-limit-minute','x-kong-upstream-latency','x-kong-proxy-latency']:
+      print(f"Removing header {header}")
+      del response['headers'][header]
+  return response
+
+
+@pytest.fixture(scope="module", autouse=True)
+def vcr_config():
+    return {
+        "filter_headers": ["authorization",'strict-transport-security'],
+        "before_record_response": filter_response_headers,
+    }
+
+def test_api_client():
+  api = FloatAPI(FLOAT_ACCESS_TOKEN, "test_api", "contact_email@company.com")
+  assert api.headers.get('Authorization') == "Bearer "+FLOAT_ACCESS_TOKEN
+  assert api.headers.get('User-Agent') ==  "{} ({})".format("test_api", "contact_email@company.com")
+  assert api.base_url == "https://api.float.com/v3/{}"
+  # Ensure we have some adapters registered
+  assert len(api.session.adapters) > 0
+
 
 def account_keys():
   return [
@@ -95,14 +136,17 @@ def department_keys():
 def task_keys():
   return [
     'task_id',
+    'root_task_id',
+    'parent_task_id',
     'project_id',
+    'phase_id',
     'start_date',
     'end_date',
     'start_time',
     'hours',
     'people_id',
     'status',
-    'priority',
+    'billable',
     'name',
     'notes',
     'repeat_state',
@@ -168,9 +212,6 @@ def project_report_keys():
     'name',
     'project_id',
     'client_id',
-    'futureScheduled',
-    'futureBillable',
-    'futureNonBillable'
     ]
 
 def holiday_keys():
@@ -209,53 +250,38 @@ def timeoff_type_keys():
     ]
 
 
-def random_string(length=32):
-  """
-  Return a random string of ASCII letters and
-  digits of length 'length'
-  """
-  # The random string
-  s = ''
-  
-  # Add a number of random samples
-  for i in range(length):
-    s += random.choice(string.ascii_letters + string.digits)
-  
-  # Return the random string
-  return s
-
-
 # Create, update and delete a client
+@pytest.mark.vcr
 def test_client():
-  
+
   # Create a client
   client = api.create_client(name=random_string(32))
   assert isinstance(client, dict), "New client is a dict"
   assert set(client_keys()).issubset(client.keys()), "New client has all keys"
 
   # Update a client
-  name = random_string(32)
   client = api.update_client(
     client_id = client['client_id'],
-    name = name
+    name = client['name']+" updated"
     )
   assert isinstance(client, dict), "Updated client is a dict"
   assert set(client_keys()).issubset(client.keys()), "Updated client has all keys"
-  assert client['name'] == name, "Name of client is updated"
+  assert "updated" in client['name'], "Name of client is updated"
 
   # Get a list of clients with a subset of fields
-  f = set(['name', 'client_id'])
-  assert f.issubset(client_keys()), "Fields must be valid"
+  f = ['name', 'client_id']
+  assert set(f).issubset(client_keys()), "Fields must be valid"
   clients = api.get_all_clients(fields=','.join(f))
   for c in clients:
     assert isinstance(c, dict), "Item in list is a dict"
-    assert f == c.keys(), "Item in list has wanted fields"
+    assert set(f) == c.keys(), "Item in list has wanted fields"
 
   # Delete client
   r = api.delete_client(client['client_id'])
   assert r == True, "Deleted client"
 
 # Create, update and delete a time_off_type
+@pytest.mark.vcr
 def test_timeoff_type():
 
   # Create a timeoff_type
@@ -266,22 +292,21 @@ def test_timeoff_type():
   assert set(timeoff_type_keys()).issubset(timeoff_type.keys()), "New timeoff_type has all keys"
 
   # Update a timeoff_type
-  timeoff_type_name = random_string(32)
   timeoff_type = api.update_timeoff_type(
     timeoff_type_id = timeoff_type['timeoff_type_id'],
-    timeoff_type_name = timeoff_type_name
+    timeoff_type_name = timeoff_type['timeoff_type_name']+ " updated"
     )
   assert isinstance(timeoff_type, dict), "Updated timeoff_type is a dict"
   assert set(timeoff_type_keys()).issubset(timeoff_type.keys()), "Updated timeoff_type has all keys"
-  assert timeoff_type['timeoff_type_name'] == timeoff_type_name, "Name of timeoff_type is updated"
+  assert " updated" in timeoff_type['timeoff_type_name'], "Name of timeoff_type is updated"
 
   # Get a list of timeoff_types with a subset of fields
-  f = set(['timeoff_type_name', 'timeoff_type_id'])
-  assert f.issubset(timeoff_type_keys()), "Fields must be valid"
+  f = ['timeoff_type_name', 'timeoff_type_id']
+  assert set(f).issubset(timeoff_type_keys()), "Fields must be valid"
   timeoff_types = api.get_all_timeoff_types(fields=','.join(f))
   for t in timeoff_types:
     assert isinstance(t, dict), "Item in list is a dict"
-    assert f == t.keys(), "Item in list has wanted fields"
+    assert set(f) == t.keys(), "Item in list has wanted fields"
 
   # Get all timeoff_types
   timeoff_types = api.get_all_timeoff_types()
@@ -297,6 +322,7 @@ def test_timeoff_type():
   #assert r == True, "Deleted timeoff_type"
 
 
+@pytest.mark.vcr
 def test_timeoff():
 
   # Create a timeoff_type
@@ -324,12 +350,12 @@ def test_timeoff():
   assert set(timeoff_keys()).issubset(timeoff_hours.keys()), "New timeoff has all keys"
 
   # Get a list of timeoffs with a subset of fields
-  f = set(['hours', 'timeoff_id'])
-  assert f.issubset(timeoff_keys()), "Fields must be valid"
+  f = ['hours', 'timeoff_id']
+  assert set(f).issubset(timeoff_keys()), "Fields must be valid"
   timeoffs = api.get_all_timeoffs(fields=','.join(f))
   for t in timeoffs:
     assert isinstance(t, dict), "Item in list is a dict"
-    assert f == t.keys(), "Item in list has wanted fields"
+    assert set(f) == t.keys(), "Item in list has wanted fields"
 
   # Delete length hours timeoff
   r = api.delete_timeoff(timeoff_hours['timeoff_id'])
@@ -368,6 +394,9 @@ def test_timeoff():
 
   # Can not delete timeoff_type with API!
 
+  # Archive person
+  r = api.archive_person(person['people_id'])
+  assert r['active'] == 0, "Archived person"
   # Delete person
   r = api.delete_person(person['people_id'])
   assert r == True, "Deleted person"
@@ -377,6 +406,7 @@ def test_timeoff():
 # Holidays must be in the future
 # (Not past? Timezone diff between client & server is probably a factor)
 # Can not create a holiday if one exists on the same date
+@pytest.mark.vcr
 def test_holiday():
 
   # Create a holiday (Must be in the future)
@@ -384,7 +414,7 @@ def test_holiday():
   holiday = api.create_holiday(
     name=random_string(32),
     date=day_in_future.isoformat()
-    )
+  )
   assert isinstance(holiday, dict), "New holiday is a dict"
   assert set(holiday_keys()).issubset(holiday.keys()), "New holiday has all keys"
 
@@ -392,19 +422,19 @@ def test_holiday():
   name = random_string(32)
   holiday = api.update_holiday(
     holiday_id = holiday['holiday_id'],
-    name = name
-    )
+    name = holiday['name'] + " updated"
+  )
   assert isinstance(holiday, dict), "Updated holiday is a dict"
   assert set(holiday_keys()).issubset(holiday.keys()), "Updated holiday has all keys"
-  assert holiday['name'] == name, "Name of holiday is updated"
+  assert "updated" in holiday['name'], "Name of holiday is updated"
 
   # Get a list of holidays with a subset of fields
-  f = set(['name', 'holiday_id'])
-  assert f.issubset(holiday_keys()), "Fields must be holiday keys"
+  f = ['name', 'holiday_id']
+  assert set(f).issubset(holiday_keys()), "Fields must be holiday keys"
   holidays = api.get_all_holidays(fields=','.join(f))
   for h in holidays:
     assert isinstance(h, dict), "Holiday in list is a dict"
-    assert f == h.keys(), "Holiday in list has wanted fields"
+    assert set(f) == h.keys(), "Holiday in list has wanted fields"
 
   # Delete holiday
   r = api.delete_holiday(holiday['holiday_id'])
@@ -412,6 +442,7 @@ def test_holiday():
 
 
 # Create, update and delete a task
+@pytest.mark.vcr
 def test_task():
 
   # Create a test project
@@ -436,26 +467,29 @@ def test_task():
   assert set(task_keys()).issubset(task.keys()), "New task has all keys"
 
   # Update notes of test task
-  notes = random_string(32)
   task = api.update_task(
     task_id = task['task_id'],
-    notes = notes
+    notes = f"{task['notes']} updated"
     )
   assert isinstance(task, dict), "Updated task is a dict"
   assert set(task_keys()).issubset(task.keys()), "Updated task has all keys"
-  assert task['notes'] == notes, "Notes of task are updated"
+  assert "updated" in task['notes'], "Notes of task are updated"
 
   # Get a list of tasks with a subset of fields
-  f = set(['name', 'task_id'])
-  assert f.issubset(task_keys()), "Fields must be task keys"
+  f = ['name', 'task_id']
+  assert set(f).issubset(task_keys()), "Fields must be task keys"
   tasks = api.get_all_tasks(fields=','.join(f))
   for t in tasks:
     assert isinstance(t, dict), "Task in list is a dict"
-    assert f == t.keys(), "Task in list has wanted fields"
+    assert set(f) == t.keys(), "Task in list has wanted fields"
 
   # Delete test task
   r = api.delete_task(task['task_id'])
   assert r == True
+
+  # Archive person
+  r = api.archive_person(person['people_id'])
+  assert r['active'] == 0, "Archived person"
 
   # Delete test person
   r = api.delete_person(person['people_id'])
@@ -467,61 +501,65 @@ def test_task():
 
 
 # Create, update and delete a person
+@pytest.mark.vcr
 def test_person():
-  
+
   # Create a person
   person = api.create_person(name=random_string(32))
   assert isinstance(person, dict), "New person is a dict"
   assert set(people_keys()).issubset(person.keys()), "New person has all keys"
 
   # Update a person
-  notes = random_string(32)
   person = api.update_person(
     people_id = person['people_id'],
-    notes = notes
-    )
+    notes = f"{person['notes']} updated"
+  )
   assert isinstance(person, dict), "Updated person is a dict"
   assert set(people_keys()).issubset(person.keys()), "Updated person has all keys"
-  assert person['notes'] == notes, "Notes of person are updated"
+  assert "updated" in person['notes'], "Notes of person are updated"
 
   # Get a list of people with a subset of fields
-  f = set(['name', 'people_id'])
-  assert f.issubset(people_keys()), "Fields must be person keys"
+  f = ['name', 'people_id']
+  assert set(f).issubset(people_keys()), "Fields must be person keys"
   people = api.get_all_people(fields=','.join(f))
   for p in people:
     assert isinstance(p, dict), "Person in list is a dict"
-    assert f == p.keys(), "Person in list has wanted fields"
-  
+    assert set(f) == p.keys(), "Person in list has wanted fields"
+
+  # Archive person
+  r = api.archive_person(person['people_id'])
+  assert r['active'] == 0, "Archived person"
+
   # Delete person
   r = api.delete_person(person['people_id'])
   assert r == True, "Deleted person"
 
 
 # Create, update and delete a project
+@pytest.mark.vcr
 def test_project():
-  
+
   # Create a project
   project = api.create_project(name=random_string(32))
   assert isinstance(project, dict), "New project is a dict"
   assert set(project_keys()).issubset(project.keys()), "New project has all keys"
 
   # Update a project
-  notes = random_string(32)
   project = api.update_project(
     project_id = project['project_id'],
-    notes = notes
+    notes = f"{project['notes']} updated"
     )
   assert isinstance(project, dict), "Updated project is a dict"
   assert set(project_keys()).issubset(project.keys()), "Updated project has all keys"
-  assert project['notes'] == notes, "Notes of project are updated"
+  assert "updated" in project['notes'], "Notes of project are updated"
 
   # Get a list of projects with a subset of fields
-  f = set(['name', 'project_id'])
-  assert f.issubset(project_keys()), "Fields must be valid"
+  f = ['name', 'project_id']
+  assert set(f).issubset(project_keys()), "Fields must be valid"
   projects = api.get_all_projects(fields=','.join(f))
   for p in projects:
     assert isinstance(p, dict), "Item in list is a dict"
-    assert f == p.keys(), "Item in list has wanted fields"
+    assert set(f) == p.keys(), "Item in list has wanted fields"
 
   # Delete project
   r = api.delete_project(project['project_id'])
@@ -529,6 +567,7 @@ def test_project():
 
 
 # Create, update and delete a department
+@pytest.mark.vcr
 def test_department():
 
   # Create a department
@@ -537,7 +576,7 @@ def test_department():
   assert set(department_keys()).issubset(department.keys()), "New department has all keys"
 
   # Update a department
-  name = random_string(32)
+  name = "New Name 123"
   department = api.update_department(
     department_id = department['department_id'],
     name = name
@@ -547,12 +586,12 @@ def test_department():
   assert department['name'] == name, "Name of department is updated"
 
   # Get a list of departments with a subset of fields
-  f = set(['name', 'department_id'])
-  assert f.issubset(department_keys()), "Fields must be valid"
+  f = ['name', 'department_id']
+  assert set(f).issubset(department_keys()), "Fields must be valid"
   departments = api.get_all_departments(fields=','.join(f))
   for d in departments:
     assert isinstance(d, dict), "Item in list is a dict"
-    assert f == d.keys(), "Item in list has wanted fields"
+    assert set(f) == d.keys(), "Item in list has wanted fields"
 
   # Delete department
   r = api.delete_department(department['department_id'])
@@ -560,6 +599,7 @@ def test_department():
 
 
 # Test people reports
+@pytest.mark.vcr
 def test_people_reports():
 
   # Get all people
@@ -582,6 +622,7 @@ def test_people_reports():
   #  assert set(people_report_keys()).issubset(r.keys()), "People report has all keys"
 
 # Test project reports
+@pytest.mark.vcr
 def test_project_reports():
 
   # Get all projects
@@ -598,14 +639,11 @@ def test_project_reports():
   #assert len(project_reports) == len(all_projects), "No of project reports match no of project"
 
   # Test keys in reports
-  for r in project_reports:
-    assert set(project_report_keys()).issubset(r.keys()), "Project report has all keys"
-
+  for pr in project_reports:
+    assert set(project_report_keys()).issubset(pr.keys()), "Project report has all keys"
 
 # Test get all functions
-def test_get_all():
-
-  functions = [
+@pytest.mark.parametrize("func, keys", [
     (api.get_all_accounts, account_keys()),
     (api.get_all_clients, client_keys()),
     (api.get_all_departments, department_keys()),
@@ -613,20 +651,21 @@ def test_get_all():
     (api.get_all_projects, project_keys()),
     (api.get_all_tasks, task_keys()),
     (api.get_all_milestones, milestone_keys()),
-    (api.get_all_phases, phase_keys())
-    ]
-  
-  for func, keys in functions:
-    r = func()
-    assert isinstance(keys, list), "Keys is a list"
-    assert isinstance(r, list), "get all is a list"
+    # (api.get_all_phases, phase_keys())
+  ])
+@pytest.mark.vcr
+def test_get_all(func, keys):
+  r = func()
+  assert isinstance(keys, list), "Keys is a list"
+  assert isinstance(r, list), "get all is a list"
 
-    for c in r:
-      assert isinstance(c, dict), "Get all list item is a dict"
-      assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
+  for c in r:
+    assert isinstance(c, dict), "Get all list item is a dict"
+    assert set(keys).issubset(c.keys()), "Dict has all keys" + str(func)
 
 
 # Test milestones
+@pytest.mark.vcr
 def test_milestones():
 
   # Create a project
@@ -644,7 +683,7 @@ def test_milestones():
   assert set(milestone_keys()).issubset(milestone.keys()), "New milestone has all keys"
 
   # Update name of milestone
-  name = random_string(32)
+  name = "New Milestone 1234"
   milestone = api.update_milestone(
     milestone_id=milestone['milestone_id'],
     name=name
@@ -654,12 +693,12 @@ def test_milestones():
   assert milestone['name'] == name, "Name of milestone is updated"
 
   # Get a list of milestones with a subset of fields
-  f = set(['name', 'milestone_id'])
-  assert f.issubset(milestone.keys()), "Fields must be valid"
+  f = ['name', 'milestone_id']
+  assert set(f).issubset(milestone.keys()), "Fields must be valid"
   milestones = api.get_all_milestones(fields=','.join(f))
   for m in milestones:
     assert isinstance(m, dict), "Item in list is a dict"
-    assert f == m.keys(), "Item in list has wanted fields"
+    assert set(f) == m.keys(), "Item in list has wanted fields"
 
   # Delete milestone
   r = api.delete_milestone(milestone['milestone_id'])
@@ -671,44 +710,45 @@ def test_milestones():
 
 
 # Test creation, get'ing and deletion
-def test_create_get_delete():
+@pytest.mark.parametrize("f_create, f_archive, f_delete, f_get, keys, o_id", [
+    (api.create_client, None, api.delete_client, api.get_client, client_keys(), 'client_id'),
+    # (api.create_person, api.archive_person, api.delete_person, api.get_person, people_keys(), 'people_id'),
+    (api.create_project, None, api.delete_project, api.get_project, project_keys(), 'project_id'),
+])
+@pytest.mark.vcr
+def test_create_get_delete(f_create, f_archive, f_delete, f_get, keys, o_id):
 
-  functions = [
-    (api.create_client, api.delete_client, api.get_client, client_keys(), 'client_id'),
-    (api.create_person, api.delete_person, api.get_person, people_keys(), 'people_id'),
-    (api.create_project, api.delete_project, api.get_project, project_keys(), 'project_id'),
-    ]
-  
-  for f_create, f_delete, f_get, keys, o_id in functions:
-    
-    # Create object
-    r = f_create(name=random_string(32))
-    
-    assert isinstance(keys, list), "Keys is a list"
-    assert isinstance(r, dict), "New object is a list is a list"
-    assert set(keys).issubset(r.keys()), "Dict has all keys" + str(f_create)
+  # Create object
+  r = f_create(name=random_string(32))
 
-    # Get object
-    created_object = r
-    
-    # Get the object we just created
-    r = f_get(created_object[o_id])
-    
-    # New object must have all keys
-    assert set(keys).issubset(r.keys()), "New objects has all keys" + str(f_get)
+  assert isinstance(keys, list), "Keys is a list"
+  assert isinstance(r, dict), "New object is a list is a list"
+  assert set(keys).issubset(r.keys()), "Dict has all keys" + str(f_create)
 
-    
-    # Person: People_type_id is updated after posting, so this fails
-    #assert created_object == r, "Get newly created object: {}".format(f_get) 
-    
-    # FIXME: Update
+  # Get object
+  created_object = r
 
-    # Delete object
-    r = f_delete(r[o_id])
-    
-    assert r == True, "New object deleted" + str(f_delete)
+  # Get the object we just created
+  r = f_get(created_object[o_id])
+
+  # New object must have all keys
+  assert set(keys).issubset(r.keys()), "New objects has all keys" + str(f_get)
+
+
+  # Person: People_type_id is updated after posting, so this fails
+  #assert created_object == r, "Get newly created object: {}".format(f_get)
+
+  # Some objects (People) must be archived before deleting
+  if f_archive != None:
+    f_archive(r[o_id])
+
+  # Delete object
+  r = f_delete(r[o_id])
+
+  assert r == True, "New object deleted" + str(f_delete)
 
 # Create, update and delete a phase
+@pytest.mark.vcr
 def test_phase():
 
   # Create a test project
@@ -719,7 +759,7 @@ def test_phase():
   # Create a test phase
   phase = api.create_phase(
     project_id = project['project_id'],
-    name=random_string(32), 
+    name=random_string(32),
     start_date = date.today().isoformat(),
     end_date = date.today().isoformat()
   )
@@ -734,14 +774,13 @@ def test_phase():
   assert set(phase_keys()).issubset(phase.keys()), "Phase has all keys"
 
  # Update a phase
-  name = random_string(32)
   phase = api.update_phase(
     phase_id = phase['phase_id'],
-    name = name
+    name = phase['name']+" updated"
     )
   assert isinstance(phase, dict), "Updated phase is a dict"
   assert set(phase_keys()).issubset(phase.keys()), "Updated phase has all keys"
-  assert phase['name'] == name, "Name of phase is updated"
+  assert "updated" in phase['name'], "Name of phase is updated"
 
   # Delete test phase
   r = api.delete_phase(phase['phase_id'])

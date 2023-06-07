@@ -1,0 +1,47 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/tasks?per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA9WRy26DMBBFf6WatRONH9jgX4kqZMJUoQWMjFlUVf69DiQkVaJsKlXq0sd37jzu
+        7guiGz/KpgarZS4El0IwCN7Hcv3op7ZlMLhA/T0N/p32cSa50hmXKsGDG2lGyGCMLsSydpHAgkAh
+        N6g3aIAB9fVDvlTEpqNLl4OfwpgaJGvyQ7t48xylkApv4HgpSBZxSq+0S9W0rava5MUZ9O5kCqlJ
+        7yOt8kADuVieqmge+gyuEy66fUiU6rL6BGuMViZZdr5u3pozxFXzY6kXzG2GFvXWcAXXmqei+dId
+        RTdvK7BI90VzZHeRodG/ikzov41Myn8SmSosz7ZFpp9Fdit6EFmWq+PrNxBkgHBnAwAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:25 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '2'
+    status:
+      code: 200
+      message: OK
+version: 1

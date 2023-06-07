@@ -1,0 +1,152 @@
+interactions:
+- request:
+    body: '{"name": "Ow3I62XMM7b9An7CiDagJaqaxQ7QoA41"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '44'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/clients
+  response:
+    body:
+      string: '{"client_id":17909738,"name":"Ow3I62XMM7b9An7CiDagJaqaxQ7QoA41"}'
+    headers:
+      Content-Length:
+      - '64'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:16 GMT
+      Location:
+      - https://api.float.com/v3/clients/17909738
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"client_id": 17909738, "name": "Ow3I62XMM7b9An7CiDagJaqaxQ7QoA41 updated"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '75'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/clients/17909738
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA6tWSs7JTM0ric9MUbIyNLc0sDQ3ttBRykvMTVWyUvIvN/Y0M4rw9TVPsnTMM3fO
+        dElM90osTKwINA/MdzQxVCgtSEksSU1RqgUA7Ph/b0gAAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:16 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/clients?fields=name%2Cclient_id&per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4XQy3KCMACF4VfpsHYBCTSJu1QQDaYIaEfS6XQoSEmr4IVwaafv3h1uHH2Bb/5z
+        Xn+1dCe3Zf0uM21sIKITBPFIK5P9Vhtrfgvnj2DDOfogtEQTaSefLDkmXYCCiprGgzpkSb3NtL/R
+        FQiAAVJh1EwLSc8t5hQ4czqzEWkMQEEz0f3v64CpwwHwqm7JBMxzU/rNDOPjojfBQWUnd80LXcQ3
+        SyAmA3Ri4sm2Y/rFDpSKFIpz063WxNq8kD4OuX0HQgOEF5G3cn03Ds4MpiXOPV6EFYpr209FX+1v
+        Q+gyLcIhVq7BPeb0kj4bRb531TR0CWJtAxf4DnQ5eRVZfvXTTQKmlkpEFpXrYheRHliVU1uFc4He
+        /gEis+k5+AEAAA==
+    headers:
+      Api-Cache:
+      - MISS
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:16 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/clients/17909738
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:16 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+version: 1

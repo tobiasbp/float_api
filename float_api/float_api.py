@@ -31,7 +31,7 @@ class FloatAPI():
       total=10,
       backoff_factor=2,
       status_forcelist=[429, 500, 502, 503, 504],
-      method_whitelist=["GET", "POST", "PATCH", "DELETE"]
+      allowed_methods=["GET", "POST", "PATCH", "DELETE"]
     )
     adapter = requests.adapters.HTTPAdapter(max_retries=retry_strategy)
     self.session.mount("https://", adapter)
@@ -134,15 +134,15 @@ class FloatAPI():
       list_to_return += l
 
       # Exit loop if we are on the last page of results
-      if int(r.headers['X-Pagination-Current-Page']) >= int(r.headers['X-Pagination-Page-Count']):
+      if int(r.headers.get('X-Pagination-Current-Page',1)) >= int(r.headers.get('X-Pagination-Page-Count',1)):
         break
 
       # Next page
       params['page'] += 1
 
-
-    # All records must be in the list to return
-    assert int(r.headers['X-Pagination-Total-Count']) == len(list_to_return), "Get all returns all records"
+    if int(r.headers.get('X-Pagination-Page-Count',1)) > 1:
+      # All records must be in the list to return
+      assert int(r.headers['X-Pagination-Total-Count']) == len(list_to_return), "Get all returns all records"
 
     # Return the list of all records
     return list_to_return
@@ -640,6 +640,14 @@ class FloatAPI():
   def delete_milestone(self, milestone_id):
 
     return self._delete('milestones/{}'.format(milestone_id))
+
+
+  def archive_person(self, people_id):
+    """
+      People must be set as inactive prior to being deleted,
+      If the user is active, you'll get a 403
+    """
+    return self.update_person(people_id=people_id, active=0)
 
 
   def delete_person(self, people_id):

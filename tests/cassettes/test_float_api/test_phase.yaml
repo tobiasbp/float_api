@@ -1,0 +1,219 @@
+interactions:
+- request:
+    body: '{"name": "a66uR4ZuW0ckSfh5DtaRHo6kA6SYZAP4"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '44'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/projects
+  response:
+    body:
+      string: '{"project_id":8465350,"name":"a66uR4ZuW0ckSfh5DtaRHo6kA6SYZAP4","client_id":null,"color":"0095D8","notes":null,"tags":[],"non_billable":0,"budget_per_phase":0,"budget_type":0,"budget_total":null,"default_hourly_rate":null,"tentative":0,"locked_task_list":0,"active":1,"project_manager":776471,"all_pms_schedule":0,"created":"2023-06-07
+        09:35:27","modified":"2023-06-07 09:35:27"}'
+    headers:
+      Content-Length:
+      - '379'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:27 GMT
+      Location:
+      - https://api.float.com/v3/projects/8465350
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"project_id": 8465350, "name": "zP8hu7kcfU8bPjOpP66ETSrShgL4nwLR", "start_date":
+      "2023-06-07", "end_date": "2023-06-07"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '121'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/phases
+  response:
+    body:
+      string: '{"phase_id":524059,"project_id":8465350,"name":"zP8hu7kcfU8bPjOpP66ETSrShgL4nwLR","color":null,"start_date":"2023-06-07","end_date":"2023-06-07","notes":null,"non_billable":null,"budget_total":null,"default_hourly_rate":null,"tentative":0,"active":1,"created":"2023-06-07
+        09:35:27","modified":"2023-06-07 09:35:27"}'
+    headers:
+      Content-Length:
+      - '315'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:27 GMT
+      Location:
+      - https://api.float.com/v3/phases/524059
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/phases/524059
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3WPQU/DMAyF/wrKuZNC23Rd7twmUTE4R27jrhleUqUOCBD/nWxTD0hwsz8/v2d/
+        iXmCBY2zQquylmpXiDmGEw58ZW3dqErJQng4o9Dis2untH0dxpe2706Pc9c0D8+HeJiO+9q/759E
+        IYZAIQrtE1FeC4zL2iwMkY0FvjiVsqw2stnIbd5Bb//kPnjTOyLoCVeXPtkjsuHAQCuzOEIiNlNI
+        kT5MvFrdRoyegd1bBvkNGG7lfb4zYpbZX5F3cqcrpctL9jlYN7p/Bd8/Qt0JDTsBAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:27 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '50'
+      X-Pagination-Total-Count:
+      - '1'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"phase_id": 524059, "name": "zP8hu7kcfU8bPjOpP66ETSrShgL4nwLR updated"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '72'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/phases/524059
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22PwW7CMBBEfwXtOUhuEofgOzekRqWcLSfeEFNjR866FaD+e01opB56230zO5q9
+        wzioCaXRIHheMr7NYAz+jB3NrC4rXnCWgVMXBAG3ph7i5qPrj3XbnF/Hpqp274dwGE770n3t31Zx
+        1IpQQwadtz6AcNHaDCZSgeRDSiE5y4s1q9Zsk2zo9L/cecJpOXfeydZYq1qLC2ujPiFJ8qTswjT2
+        KlqSg4/BXmWYc58SoSNF5jOB9I7qnuNL6hlwbvzru3htevPY//RZsa0ouMhr+P4BdQmthjIBAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:28 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/phases/524059
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:28 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/projects/8465350
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:28 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+      X-Pagination-Per-Page:
+      - '50'
+    status:
+      code: 204
+      message: No Content
+version: 1

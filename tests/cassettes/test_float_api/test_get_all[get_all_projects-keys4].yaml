@@ -1,0 +1,64 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/projects?per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA+2ZW4+iShRG/0rH554EijtvKIriFfA+mRgKSkEKikZA8WT++2HaUfskaMfXo4kv
+        FB8Ia1m7NvLzn1qckC1y0pXv1mSR5TkgUe+1yA5RTa7RTJ0MRr5LL7VQb3tu0iLEyCbH9nTurgvN
+        qL3XHOyj6HR0lGFcDhBMkvJYipI4VSwTEUnRrhwYkAi9ZbFrp8gth1N7U47+/PVeg5m7QekqLeLy
+        O6nrNkltfD7r37EYJavYs3enoIvWdobTlUeyBBerpDzzOR+RaAV9jG2IT9m0vEo79fPTFiZOgNxV
+        au+CFfZ36eeg7Zz20+8XKKEd2RtU3o4g8KxQ7rAxXsXhbrVzPORmf8/tJOjzpuQaoADzg+J/UMIb
+        JcmAljmuvNWQuP7avxn4/V5hQRQvFqLG6OiMtZmkzjp41Kpb7CYtDoleQAopfnf/svCdBZb+xgIL
+        blhgLhZ4r67nCYWV0ZGHGw0WnBEKuJ8ODHUCFc57WfjOAvOdhTJQZYHm6IuFj5CLHbAIBKwVheBD
+        0GsIBynZNvoZl2vu8WXhjgVR5hiZA7ctnAOVFtirhW1ksmgHvX7mjXIzHAxpc6Prrjov4FSPi1dF
+        +sYCVX7uWvgMVFpgruuCZLQ2e0tY43Y4yM0OMg5N7LGil+pqk6yz4SMWTnufg/29OnQOVLNnL+zH
+        o27fW7iHY6+wRGgayUAoslFYGBE6msNx58W+Gi3Ff8O+DFSyB/yFvev1hsfjBA4nhu0odc7PEzhj
+        2gHgD3AU8Q91pU/DnpVk+k4veg5UsGdY+lpzgpxad71kyM3Zgd2jpZFPJ8Oc25uESHThMS/2/0XL
+        v9GczHAye6vefwlUs7/WnKLOivMIxQYdcG2Il8yRXgBhu0/7zITikvzFvgote/sZ7Eugmv2141l3
+        gRgUPTCEZKpas9xRRWed9zes6Lc+rJh7qOOZqRqmEO5OjZ0DRJBv2aHtaZ1puu3sdYik/30XdAYP
+        bq3EXwJVZhjhOiuCxtzcDHjO57eONfXCvmuk+jjne3pHgp65eMjMkjB9NSQ4RIqXGJzUgWHIo2Mc
+        GCrk1iH7HGaAJFN369UpUGWG/lKvzDAqkOAoeMh/BHN+MKv7FOcuBTYWcrvYPPaUoCc84QO1YXfi
+        cWNqCSTZEj00ESsEOkqc3nOYoYHMCPfMnAIVZoAoXVdxXzBD92C4imMPmZ6qHHRXXHRJ4AyhiS0F
+        PmQmtBbdnIjjpj8ChrpVoNRBE6XY7jfugW0en2LOsH/AU9JtM+dApRlwnTMNydC8xq6rqW6d9kF9
+        uR/UfZShZVdjVOf4kJknWeOZP39agDuz4hyoZE8JF/aAF+LpsmUEu/Jisp4ddmLX2MC1pmrtfB49
+        tMY/D3tKZsW77D8D1eyvv/tMj3MrJwfL+yDYAlxBothvEVooPLKf8+aLfTVa5k5vew5Us7/+s71g
+        mj5sGZSC3HRxzNzJnEl9EUm7UHf8ZlN7sb+B9k6PdA5Us7++YWsy0zZZ1sdLZaFNUV8Z2LnZ2077
+        mjeyeBq82FexZyWZu7PWngMV7Gn+yxudMdqlb6NT4B5nuHag6zwbZ0qUmbLNZ25yvgR+//oXcF4Y
+        vkceAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:25 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '20'
+    status:
+      code: 200
+      message: OK
+version: 1

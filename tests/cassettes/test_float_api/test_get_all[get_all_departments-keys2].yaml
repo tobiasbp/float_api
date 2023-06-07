@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/departments?per-page=200&page=1
+  response:
+    body:
+      string: '[]'
+    headers:
+      Content-Length:
+      - '2'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:24 GMT
+      Link:
+      - <https://api.float.com/v3/departments?per-page=200&page=1>; rel=self
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '0'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1

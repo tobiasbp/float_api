@@ -1,0 +1,197 @@
+interactions:
+- request:
+    body: '{"name": "aSWZR2qWnoLxx6G9YenM381FxGr3d03C"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '44'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: POST
+    uri: https://api.float.com/v3/people
+  response:
+    body:
+      string: '{"people_id":18032398,"name":"aSWZR2qWnoLxx6G9YenM381FxGr3d03C","email":null,"job_title":null,"department":null,"notes":null,"avatar_file":"https://floatcdn.com/icons/avatar1-80.png","auto_email":-1,"employee_type":1,"work_days_hours":null,"work_days_hours_history":null,"non_work_days":null,"work_day_hours":null,"people_type_id":1,"region_id":79699,"contractor":0,"start_date":null,"end_date":null,"active":1,"created":"2023-06-07
+        09:35:21","modified":"2023-06-07 09:35:21","tags":[],"default_hourly_rate":null}'
+    headers:
+      Content-Length:
+      - '513'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:21 GMT
+      Location:
+      - https://api.float.com/v3/people/18032398
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"people_id": 18032398, "notes": "None updated"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/people/18032398
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA12RQU/DMAyF/8qUc7umjdjaXpHYBTjAYQKEotC4WyBNQuqOVYj/TsLWoe3oF/v5
+        88s3cWCdBq4kqfOSsoJVZUKM6IDURDyunx+Kz7Wxt/v9YlU9gbljZX6zX3kmKbsmCYFOKE1qM2id
+        kHf7xlGhhkmQ4ITHDgxOirEIfbC+twZmg5MCQQYbsRMoPG9VnCVbRNfXWdZqK7CRZt7YLlONNX12
+        aMzTks6d2cTJAS0/UqR5BHLajgAcRxe8gvJl/QeXYuz51g6+n0guZL5VPVo//oMafmq5nDl3OkYY
+        Fx5yTIiHjQoGsVpWi6pKSKBHL5qwgtQ0IX24Ank8f3IBI8/q0Kt2hwsaD385HV86K1WrYk0KWrCU
+        LlK6nNGqZld1kYdMUGwC3Mtr/IBWDBr/ePXI/cn/5xfPD+dB+gEAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:21 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: GET
+    uri: https://api.float.com/v3/people?fields=name%2Cpeople_id&per-page=200&page=1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3XMwW6CMAAA0F9ZevYglFbwJlXQCIKiCFuWBaQyA1KETijGf98NL/g+4H09QElZ
+        mdOfSwKmkjqGMtTUESiiKwVTEHnHz518OxbMaltsaiEtbKhKRmtWMBlDAp6jgQC9gnSCgg75lZ66
+        8G9dsaxV9wUvebaAt/2KozfBpA/iIGqdk211W9SY2h5ZwvWIY1RUqw7JPT+/CXAfOHqnlA1bZYTP
+        zsG1dk/e4Q7PqRvYHQ2U8E2A+mBTXUzhNHMdErmw/RhnCxRofMJU7iGCpOFAGffBr17wOK7D+bpu
+        JGIoziZdqr5rcE8WWMDdcABhHxxqfeMJK/AFopVTCxtRM5wtnRvDSbxdJkOBhPErmEf3S/JBWJ6z
+        K3h+/wMK6oyD9QEAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:21 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+      X-Pagination-Current-Page:
+      - '1'
+      X-Pagination-Page-Count:
+      - '1'
+      X-Pagination-Per-Page:
+      - '200'
+      X-Pagination-Total-Count:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"people_id": 18032398, "active": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '36'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: PATCH
+    uri: https://api.float.com/v3/people/18032398
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA11RQU7DMBD8SuVz0jixaJNckegFOMChAoQsE29ag2MbZ1MaIf6OXZqi9rjjmdnZ
+        8TdxYJ0GriSp85KyglVlQozogNREPK6fH4rPtbG3+/1iVT2BuWNlfrNfeSYpuyYJgU4oTWozaJ2Q
+        d/vGUaGGCZDghMcODE6IsQh9sL63BmaDkwJBBhuxEyg8b1XUki2i6+ssa7UV2Egzb2yXqcaaPvsj
+        5mlJ585sonJAy48p0jwGctqOABxHF7wC8mX9B5di7PnWDr6fklzAfKt6tH78D2r4iXKpOXc6VhgX
+        /vWYEA8bFQzitKwWVZWQkB69aMIKUtOE9OEK5PH8yQWMPJsDV+3gQG48HHo6vnRWqlbFmRS0YCld
+        pHQ5o1XNruqiCJ2g2IRwL6/xA1oxaDzk1SP3J/+fXzODpsb6AQAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 07 Jun 2023 09:35:22 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept,Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Unit testing of Python API wrapper float-api (float-api-wrapper-unit-test@example.com)
+    method: DELETE
+    uri: https://api.float.com/v3/people/18032398
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Wed, 07 Jun 2023 09:35:22 GMT
+      Server:
+      - Apache/2.4.56 (Debian)
+      Vary:
+      - Accept
+    status:
+      code: 204
+      message: No Content
+version: 1

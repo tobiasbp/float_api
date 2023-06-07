@@ -21,10 +21,10 @@ you can be contacted. Read the documentation
 
     # Import the API
     from float_api import FloatAPI
-    
+
     # Instantiate API object
     api = FloatAPI(FLOAT_ACCESS_TOKEN, 'My user agent', 'me@example.org')
-    
+
     # Get a list of all people
     p = api.get_all_people()
 
@@ -54,6 +54,7 @@ lists, False and empty dictionaries respectively.
 * create_person(data)
 * get_person(people_id)
 * update_person(data)
+* archive_person(people_id)
 * delete_person(people_id)
 
 ## Phases
@@ -95,3 +96,17 @@ lists, False and empty dictionaries respectively.
 # Testing
 
 Test the wrapper by running _pytest_ in the repository's root directory.
+
+## Adding new Tests
+
+If you're making changes to a test or a new endpoint you can add new cassettes to the library via:
+
+```shell
+pytest --record-mode=new_episodes
+```
+
+This will add only NEW requests, should you need to re-generate all cassettes, you can do this via:
+
+```shell
+pytest --record-mode=rewrite
+```
