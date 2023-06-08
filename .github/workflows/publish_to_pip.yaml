@@ -28,7 +28,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -root-user-action=ignore build
+          pip install --root-user-action=ignore build
 
       # Update setup.cfg with the version number of the GitHub release
       - name: Set version number for release build
