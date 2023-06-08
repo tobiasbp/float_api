@@ -498,7 +498,7 @@ def test_loggedtime():
   assert isinstance(person, dict), "New person is a dict"
   assert set(people_keys()).issubset(person.keys()), "New person has all keys"
 
-  # Create a test task
+  # Create a Logged Time entry
   logged_time = api.create_logged_time(
     project_id = project['project_id'],
     date = date.today().isoformat(),
@@ -509,7 +509,7 @@ def test_loggedtime():
   assert isinstance(task, dict), "New Logged Time is a dict"
   assert set(loggedtime_keys()()).issubset(logged_time.keys()), "New Logged Time has all keys"
 
-  # Update notes of test task
+  # Update Logged Time entry
   notes = random_string(64)
   logged_time = api.update_logged_time(
     logged_time_id = logged_time['logged_time_id'],
