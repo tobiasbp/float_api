@@ -38,7 +38,7 @@ jobs:
           python -m build
 
       - name: Publish package
-        if: github.event_name = "release"
+        if: github.event_name == "release"
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
