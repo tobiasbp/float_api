@@ -506,7 +506,7 @@ def test_loggedtime():
     notes= random_string(32),
     people_id = person['people_id']
     )
-  assert isinstance(task, dict), "New Logged Time is a dict"
+  assert isinstance(logged_time, dict), "New Logged Time is a dict"
   assert set(loggedtime_keys()()).issubset(logged_time.keys()), "New Logged Time has all keys"
 
   # Update Logged Time entry
@@ -515,7 +515,7 @@ def test_loggedtime():
     logged_time_id = logged_time['logged_time_id'],
     notes = notes
     )
-  assert isinstance(task, dict), "Updated task is a dict"
+  assert isinstance(logged_time, dict), "Updated task is a dict"
   assert set(loggedtime_keys()()).issubset(logged_time.keys()), "Updated Logged Time has all keys"
   assert logged_time['notes'] == notes, "Notes of Logged Time are updated"
 
