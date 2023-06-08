@@ -27,9 +27,8 @@ jobs:
           python-version: "3.x"
       
       - name: Install dependencies
-        # python -m pip install --upgrade pip
         run: |
-          pip install build
+          pip install -root-user-action=ignore build
       
       # Update version in setup.cfg before building
       - name: Build package
