@@ -168,7 +168,7 @@ class FloatAPI():
 
     # Raise exception on unexpected status code
     if r.status_code not in (200, 201):
-      raise UnexpectedStatusCode("Got {} but expected 201".format(r.status_code))
+      raise UnexpectedStatusCode("Got {} but expected 200 or 201".format(r.status_code))
 
     return r.json()
 
