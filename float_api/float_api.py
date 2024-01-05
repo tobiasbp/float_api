@@ -167,8 +167,8 @@ class FloatAPI():
       raise DataValidationError("API could not validate the data you posted" )
 
     # Raise exception on unexpected status code
-    if r.status_code != 201:
-      raise UnexpectedStatusCode("Got {} but expected 201".format(r.status_code))
+    if r.status_code not in (200, 201):
+      raise UnexpectedStatusCode("Got {} but expected 200 or 201".format(r.status_code))
 
     return r.json()
 
