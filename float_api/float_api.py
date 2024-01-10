@@ -32,7 +32,7 @@ class FloatAPI():
       total=10,
       backoff_factor=2,
       status_forcelist=[429, 500, 502, 503, 504],
-      method_whitelist=["GET", "POST", "PATCH", "DELETE"]
+      allowed_methods=["GET", "POST", "PATCH", "DELETE"]
     )
     adapter = requests.adapters.HTTPAdapter(max_retries=retry_strategy)
     self.session.mount("https://", adapter)
